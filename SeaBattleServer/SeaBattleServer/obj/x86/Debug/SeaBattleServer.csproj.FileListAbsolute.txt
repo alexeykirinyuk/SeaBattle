@@ -7,3 +7,5 @@ C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServ
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\Newtonsoft.Json.xml
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\SeaBattleLibrary.dll
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\SeaBattleLibrary.pdb
+C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.Properties.Resources.resources
+C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.csproj.GenerateResource.Cache

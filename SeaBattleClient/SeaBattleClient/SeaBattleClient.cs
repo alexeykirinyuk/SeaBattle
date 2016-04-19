@@ -4,50 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Net.Sockets;
 using System.Net;
-using Newtonsoft.Json;
 using System.Threading;
 using SeaBattleLibrary;
+using System.IO;
 
 namespace SeaBattleClient
 {
     class BattleCient
     {  
-        private int Port;
-        private string HostName;
+        private int port;                       //порт
+        private string hostName;                //имя хоста
+        private UdpClient udpClient;
+        private IPEndPoint remoteIpEndPoint;
+        private BattleForm form;
+        public bool isStart { get; private set; }
 
-        private UdpClient Client;
-        private IPEndPoint RemoteIpEndPoint;
-        private BattleForm Form;
-        private Thread ServerListener;
-
-        public bool isStart { get; set; }
-
-        public BattleCient(string HostName, int Port)
+        public BattleCient(string hostName, int port, BattleForm form)
         {
-            this.HostName = HostName;
-            this.Port = Port;
+            this.hostName = hostName;
+            this.port = port;
+            this.form = form;
+            StartClient();
         }
 
-        public void StartClient()
+        private void StartClient()
         {
             try
             {
-                Client = new UdpClient(HostName, Port);
-                IPHostEntry remoteHostEntry = Dns.GetHostEntry(HostName);
-                RemoteIpEndPoint = new IPEndPoint(remoteHostEntry.AddressList[0], Port);
+                udpClient = new UdpClient(hostName, port);
+                IPHostEntry remoteHostEntry = Dns.GetHostEntry(hostName);
+                remoteIpEndPoint = new IPEndPoint(remoteHostEntry.AddressList[0], port);
                 isStart = true;
-                ServerListener = new Thread(new ThreadStart(FromServer));
-                ServerListener.Start();
+                Thread serverListenerThread = new Thread(new ThreadStart(FromServer));
+                serverListenerThread.IsBackground = true;
+                serverListenerThread.Start();
             }
             catch (Exception)
             {
-                Form.ShowMessageBox("Error, No connection to the BattleServer");
+                form.ShowMessageBox("Error, No connection to the BattleServer");
             }
-        }
-
-        public void SetBattleForm(BattleForm Form)
-        {
-            this.Form = Form;
         }
 
         public void SendShips(List<Ship> ships)
@@ -55,22 +50,21 @@ namespace SeaBattleClient
             try
             {
                 if (!isStart) return;
-                string serializeList = JsonConvert.SerializeObject(ships);
-                Method method = new Method(Method.NamesServer.SetShips, new string[] { serializeList });
+                Method method = new Method(Method.MethodName.SetShips, ParamConvert.Convert(ships));
                 SendMethodOnServer(method);
             }
             catch (Exception e)
             {
-                Form.ShowMessageBox("Error->" + e.Message);
+                form.ShowMessageBox("Error->" + e.Message);
             }
         }
 
         private void SendMethodOnServer(Method method)
         {
-            string serializeMethod = JsonConvert.SerializeObject(method);
-            byte[] methodByte = Encoding.ASCII.GetBytes(serializeMethod.ToCharArray());
-            Form.ShowMessageBox(serializeMethod);
-            Client.Send(methodByte, methodByte.Length);
+            string serializeMethod = method.Serialize();
+            byte[] methodByte = Encoding.Unicode.GetBytes(serializeMethod.ToCharArray());
+            form.ShowMessageBox(serializeMethod);
+            udpClient.Send(methodByte, methodByte.Length);
         }
 
         private void FromServer()
@@ -78,80 +72,97 @@ namespace SeaBattleClient
             try {
                 while (isStart)
                 {
-                    var receive = Client.Receive(ref RemoteIpEndPoint);
-                    var message = Encoding.ASCII.GetString(receive);
-                    CallMethod(ParseMethod(message));
+                    byte[] receive = udpClient.Receive(ref remoteIpEndPoint);
+                    string message = Encoding.Unicode.GetString(receive);
+                    CallMethod(Method.Deserialize(message));
                 }
             }
             catch (Exception e)
             {
-                Form.ShowMessageBox("Cannot listen server: " + e.Message);
+                form.ShowMessageBox("Cannot listen server: " + e.Message);
             }
-        }
-
-        private Method ParseMethod(string message)
-        {
-            Method method = JsonConvert.DeserializeObject<Method>(message);
-            return method;
         }
 
         private void CallMethod(Method method)
         {
-            switch (method.MethodName)
+            switch (method.Name)
             {
-                case Method.NamesClient.SetStatus:
-                    PrintStatus(JsonConvert.DeserializeObject<Game.Status>(method.Parameters[0]));
-                    ProcessStatus(JsonConvert.DeserializeObject<Game.Status>(method.Parameters[0]));
+                case Method.MethodName.SetTurn:
+                    ProcessTurn(ParamConvert.GetTurn(method[0]));
                     break;
-                case Method.NamesClient.Message:
-                    Form.ShowMessageBox(method.Parameters[0]);
+                case Method.MethodName.Message:
+                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
                     break;
-                case Method.NamesClient.SetEnemyMap:
-                    SetEnemyMap(JsonConvert.DeserializeObject<StatusField[,]>(method.Parameters[0]));
+                case Method.MethodName.SetResultAfterYourHit:
+                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
+                    ProcessTurn(ParamConvert.GetTurn(method[1]));
+                    form.SetEnemyMap(ParamConvert.GetFieldArray(method[2]));
+                    break;
+                case Method.MethodName.SetResultAfterEnemyHit:
+                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
+                    ProcessTurn(ParamConvert.GetTurn(method[1]));
+                    form.SetMyMap(ParamConvert.GetFieldArray(method[2]));
+                    break;
+                case Method.MethodName.GameOver:
+                    ProcessStatusOver(ParamConvert.GetTurn(method[0]));
+                    break;
+                case Method.MethodName.YourEnemyExit:
+                    form.SetLabelTurn("Выигрыш");
+                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
                     break;
             }
         }
 
-        private void PrintStatus(Game.Status status)
+        private void ProcessTurn(Player.Turn turn)
         {
-            Form.SetLabelStatus(status + "");
+            form.SetLabelTurn(turn + "");
+            switch (turn)
+            {
+                case Player.Turn.YOUR:
+                    form.EnemyPanelEnamble = true;
+                    form.SetLabelTurn("ты");
+                    break;
+                case Player.Turn.ENEMY:
+                    form.EnemyPanelEnamble = false;
+                    form.SetLabelTurn("противник");
+                    break;
+            }
         }
 
-        private void ProcessStatus(Game.Status status)
+        private void ProcessStatusOver(Player.Turn turn)
         {
-            switch (status)
+            switch (turn)
             {
-                case Game.Status.YOUR:
-                    Form.MyTurn();
+                case Player.Turn.YOUR:
+                    form.EnemyPanelEnamble = false;
+                    form.ShowMessageBox("Ты победил врага! Гуд");
+                    form.SetLabelTurn("Выигрыш");
                     break;
-                case Game.Status.ENEMY:
-                    Form.EnemyTurn();
+                case Player.Turn.ENEMY:
+                    form.EnemyPanelEnamble = false;
+                    form.ShowMessageBox("Ты проиграл! Нот Гуд");
+                    form.SetLabelTurn("Проигрыш");
                     break;
             }
         }
 
         public void HitTheEnemy(Address address)
         {
-            Method method = new Method(Method.NamesServer.HitTheEnemy, new string[] {JsonConvert.SerializeObject(address)});
+            Method method = new Method(Method.MethodName.HitTheEnemy, address);
             SendMethodOnServer(method);
         }
 
         private void SetEnemyMap(StatusField[,] enemyMap)
         {
-            Form.SetEnemyMap(enemyMap);
+            form.SetEnemyMap(enemyMap);
         }
 
-        public void Exit()
+        public void ClientExit()
         {
-            Method method = new Method(Method.NamesServer.Exit, null);
+            Method method = new Method(Method.MethodName.Exit, null);
             SendMethodOnServer(method);
-            Client.Close();
+            udpClient.Close();
             isStart = false;
-            if(ServerListener.IsAlive) 
-                ServerListener.Interrupt();
         }
-
-        
-        
     }
 }
