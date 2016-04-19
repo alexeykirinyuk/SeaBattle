@@ -1,7 +1,0 @@
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\TestLibraryClasses\TestLibraryClasses\obj\x86\Debug\TestLibraryClasses.csprojResolveAssemblyReference.cache
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\TestLibraryClasses\TestLibraryClasses\bin\Debug\TestLibraryClasses.exe
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\TestLibraryClasses\TestLibraryClasses\bin\Debug\TestLibraryClasses.pdb
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\TestLibraryClasses\TestLibraryClasses\bin\Debug\Newtonsoft.Json.dll
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\TestLibraryClasses\TestLibraryClasses\bin\Debug\Newtonsoft.Json.xml
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\TestLibraryClasses\TestLibraryClasses\obj\x86\Debug\TestLibraryClasses.exe
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\TestLibraryClasses\TestLibraryClasses\obj\x86\Debug\TestLibraryClasses.pdb
