@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 using SeaBattleLibrary;
 
 namespace SeaBattleClient
@@ -19,11 +15,11 @@ namespace SeaBattleClient
 
         private const int N = 10;
 
-        private int[] abilityAddShip = {4, 3, 2, 1};
+        private int[] abilityAddShip = { 4, 3, 2, 1 };
         private int abilityAddField = 0;
 
         private List<Ship> ShipsBufer = new List<Ship>();
-        private List<Address> AddressBufer = new List<Address>(); //тут хранятся адреса для добавления в корабль
+        private List<Address> AddressBufer = new List<Address>();
 
         private BattleCient Client;
 
@@ -32,9 +28,20 @@ namespace SeaBattleClient
             InitializeComponent();
         }
 
-        public void SetLabelTurn(String turn)
+        public string LabelTurnText
         {
-            labelTurn.Invoke(new LabelTextInvokeDel((str) => labelTurn.Text = str), turn);
+            set
+            {
+                labelTurn.Invoke(new LabelTextInvokeDel((str) => labelTurn.Text = str), value);
+            }
+        }
+
+        public bool EnemyPanelEnamble
+        {
+            set
+            {
+                panelEnemy.Invoke(new Del(() => panelEnemy.Enabled = value));
+            }
         }
 
         public void ShowMessageBox(string message)
@@ -42,12 +49,41 @@ namespace SeaBattleClient
             MessageBox.Show(message);
         }
 
-        public Address GetAddressPicture(PictureBox box)
+        public void SetEnemyMap(StatusField[,] map)
         {
-            return new Address(box.Location.X / 50, box.Location.Y / 50);
+            SetMap(panelEnemy, map);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public void SetMyMap(StatusField[,] map)
+        {
+            SetMap(panelMy, map);
+        }
+
+        public void Reboot()
+        {
+            ForAllFields(panelEnemy, (l) => l.Image = GetImage(StatusField.Empty));
+            ForAllFields(panelMy, (l) => l.Image = GetImage(StatusField.Empty));
+
+            panelMy.Invoke(new Del(() => panelMy.Enabled = false));
+            panelEnemy.Invoke(new Del(() => panelEnemy.Enabled = false));
+
+            abilityAddShip[0] = 4;
+            abilityAddShip[1] = 3;
+            abilityAddShip[2] = 2;
+            abilityAddShip[3] = 1;
+            abilityAddField = 0;
+
+            buttonSetMap.Invoke(new Del(() => buttonSetMap.Enabled = false));
+            buttonCancelShip.Invoke(new Del(() => buttonCancelShip.Enabled = true));
+
+            ShipsBufer.Clear();
+            AddressBufer.Clear();
+
+            SwichOnAllButtonsAdd();
+        }
+
+        #region GUI listeners
+        private void BattleForm_Load(object sender, EventArgs e)
         {
             panelMy.Enabled = false;
             panelEnemy.Enabled = false;
@@ -55,25 +91,17 @@ namespace SeaBattleClient
             buttonSetMap.Enabled = false;
         }
 
-        private void ForAllFields(Panel panel, ActionToPicBox actionToPictureBox)
-        {
-            foreach (PictureBox picture in panel.Controls.OfType<PictureBox>())
-            {
-                actionToPictureBox(picture);
-            }
-        }
-
         private void buttonAddShip_Click(object sender, EventArgs e)
         {
-            Button button = (Button) sender;
-            String tagButton = (String) button.Tag;
+            Button button = (Button)sender;
+            String tagButton = (String)button.Tag;
             int idButton = int.Parse(tagButton);
             SwichOffAllButtonsAdd();
             panelMy.Enabled = true;
             abilityAddField = idButton + 1;
         }
 
-        private void OnMyField_Click(object sender, EventArgs e)
+        private void onMyField_Click(object sender, EventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
             Address address = GetAddressPicture(pictureBox);
@@ -113,6 +141,63 @@ namespace SeaBattleClient
                 if (IsPlacingOnShips)
                 {
                     buttonSetMap.Enabled = true;
+                }
+            }
+        }
+
+        private void OnEnemyField_Click(object sender, EventArgs e)
+        {
+            if (!Client.isStart) return;
+            PictureBox pictureBox = (PictureBox)sender;
+            Address address = GetAddressPicture(pictureBox);
+            Client.HitTheEnemy(address);
+        }
+
+        private void startGame_Click(object sender, EventArgs e)
+        {
+            buttonCancelShip.Enabled = false;
+            Client = new BattleCient("127.0.0.1", 25, this);
+            Client.SendShips(ShipsBufer);
+            buttonSetMap.Enabled = false;
+        }
+
+        private void BattleForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Client != null)
+                if (Client.isStart)
+                    Client.ClientExit();
+        }
+
+        private void buttonHuck_Click(object sender, EventArgs e)
+        {
+            buttonSetMap.Enabled = true;
+        }
+
+        private void buttonCancelShip_Click(object sender, EventArgs e)
+        {
+            if (Client != null) if (Client.isStart) return;
+            Reboot();
+        }
+        #endregion
+        
+        private void ForAllFields(Panel panel, ActionToPicBox actionToPictureBox)
+        {
+            foreach (PictureBox picture in panel.Controls.OfType<PictureBox>())
+            {
+                actionToPictureBox(picture);
+            }
+        }
+
+        private void SetMap(Panel panel, StatusField[,] map)
+        {
+            for (int x = 25, i = 0; x < N * 50; x += 50, i++)
+            {
+                for (int y = 25, j = 0; y < N * 50; y += 50, j++)
+                {
+                    panel.Invoke(new Del(() => {
+                        PictureBox picture = (PictureBox)panel.GetChildAtPoint(new Point(y, x));
+                        picture.Image = GetImage(map[i, j]);
+                    }));
                 }
             }
         }
@@ -166,6 +251,38 @@ namespace SeaBattleClient
             return button;
         }
 
+        private Address GetAddressPicture(PictureBox box)
+        {
+            return new Address(box.Location.Y / 50, box.Location.X / 50);
+        }
+
+        private Image GetImage(StatusField statusField)
+        {
+            Image resultImage;
+            switch (statusField)
+            {
+                case StatusField.DeadEmpty:
+                    resultImage = Properties.Resources.DeadEmpty;
+                    break;
+                case StatusField.DeadPartShip:
+                    resultImage = Properties.Resources.DeadPartShip;
+                    break;
+                case StatusField.Empty:
+                    resultImage = Properties.Resources.Empty;
+                    break;
+                case StatusField.Ship:
+                    resultImage = Properties.Resources.Ship;
+                    break;
+                case StatusField.DeadShip:
+                    resultImage = Properties.Resources.DeadShip;
+                    break;
+                default:
+                    resultImage = Properties.Resources.Empty;
+                    break;
+            }
+            return resultImage;
+        }
+
         private void SwichOffAllButtonsAdd()
         {
             buttonAddOnesShip.Enabled = false;
@@ -181,129 +298,8 @@ namespace SeaBattleClient
                 if (abilityAddShip[i] > 0) GetButtonAddShip(i + 1).Enabled = true;
             }
         }
-
-        private void SetMap_Click(object sender, EventArgs e)
-        {
-            buttonCancelShip.Enabled = false;
-            Client = new BattleCient("127.0.0.1", 25, this);
-            Client.SendShips(ShipsBufer);
-            buttonSetMap.Enabled = false;
-        }
-
-        private void BattleForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (Client != null)
-                if (Client.isStart)
-                    Client.ClientExit();
-        }
-
-        private void buttonResetConnect_Click(object sender, EventArgs e)
-        {
-            buttonSetMap.Enabled = true;
-        }
-
-        private void panelEnemy_Click(object sender, EventArgs e)
-        {
-            PictureBox picture = (PictureBox) sender;
-            Address address = GetAddressPicture(picture);
-            Client.HitTheEnemy(address);
-        }
-
-        public bool EnemyPanelEnamble
-        {
-            set
-            {
-                panelEnemy.Invoke(new Del(() => panelEnemy.Enabled = value));
-            }
-        }
-
-        private void OnEnemyField_Click(object sender, EventArgs e)
-        {
-            if (!Client.isStart) return;
-            PictureBox pictureBox = (PictureBox)sender;
-            Address address = GetAddressPicture(pictureBox);
-            Client.HitTheEnemy(address);
-        }
-
-        private void SetMap(Panel panel, StatusField[,] map)
-        {
-            for (int x = 25, i = 0; x < N * 50; x += 50, i++)
-            {
-                for (int y = 25, j = 0; y < N * 50; y += 50, j++)
-                {
-                    panel.Invoke(new Del(() => {
-                        PictureBox picture = (PictureBox)panel.GetChildAtPoint(new Point(x,y));
-                        picture.Image = GetImage(map[i, j]);
-                    }));
-                }
-            }
-        }
-
-        public void SetEnemyMap(StatusField[,] map)
-        {
-            SetMap(panelEnemy, map);
-        }
-
-        public void SetMyMap(StatusField[,] map)
-        {
-            SetMap(panelMy, map);
-        }
-
-        private Image GetImage(StatusField statusField)
-        {
-            Image resultImage;
-            switch (statusField)
-            {
-                case StatusField.DeadEmpty:
-                    resultImage = Properties.Resources.KilledEmpty;
-                    break;
-                case StatusField.DeadPartShip:
-                    resultImage = Properties.Resources.KilledShip;
-                    break;
-                case StatusField.Empty:
-                    resultImage = Properties.Resources.Empty;
-                    break;
-                case StatusField.Ship:
-                    resultImage = Properties.Resources.Ship;
-                    break;
-                case StatusField.DeadShip:
-                    resultImage = Properties.Resources.BlowUpShip;
-                    break;
-                default:
-                    resultImage = Properties.Resources.Empty;
-                    break;
-            }
-            return resultImage;
-        }
-
-        public void Reboot()
-        {
-            ForAllFields(panelEnemy, (l) => l.Image = GetImage(StatusField.Empty));
-            ForAllFields(panelMy, (l) => l.Image = GetImage(StatusField.Empty));
-
-            panelMy.Invoke(new Del(() => panelMy.Enabled = false));
-            panelEnemy.Invoke(new Del(() => panelEnemy.Enabled = false));
-
-            abilityAddShip[0] = 4;
-            abilityAddShip[1] = 3;
-            abilityAddShip[2] = 2;
-            abilityAddShip[3] = 1;
-            abilityAddField = 0;
-
-            buttonSetMap.Invoke(new Del(() => buttonSetMap.Enabled = false));
-            buttonCancelShip.Invoke(new Del(() => buttonCancelShip.Enabled = true));
-
-            ShipsBufer.Clear();
-            AddressBufer.Clear();
-
-            SwichOnAllButtonsAdd();
-        }
-
-        private void buttonCancelShip_Click(object sender, EventArgs e)
-        {
-            if (Client != null) if (Client.isStart) return;
-            Reboot();
-        }
+        
+        
     }
     
     

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using SeaBattleLibrary;
-using System.IO;
 
 namespace SeaBattleClient
 {
     class BattleCient
     {  
-        private int port;                       //порт
-        private string hostName;                //имя хоста
+        private int port;
+        private string hostName;
         private UdpClient udpClient;
         private IPEndPoint remoteIpEndPoint;
         private BattleForm form;
@@ -45,6 +43,32 @@ namespace SeaBattleClient
             }
         }
 
+        private void FromServer()
+        {
+            try
+            {
+                while (isStart)
+                {
+                    byte[] receive = udpClient.Receive(ref remoteIpEndPoint);
+                    string message = Encoding.Unicode.GetString(receive);
+                    CallMethod(Method.Deserialize(message));
+                }
+            }
+            catch (Exception e)
+            {
+                form.ShowMessageBox("Cannot listen server: " + e.Message);
+            }
+        }
+
+        private void SendMethodOnServer(Method method)
+        {
+            string serializeMethod = method.Serialize();
+            byte[] methodByte = Encoding.Unicode.GetBytes(serializeMethod.ToCharArray());
+            form.ShowMessageBox(method.ToString());
+            udpClient.Send(methodByte, methodByte.Length);
+        }
+
+        #region server's methods
         public void SendShips(List<Ship> ships)
         {
             try
@@ -59,29 +83,20 @@ namespace SeaBattleClient
             }
         }
 
-        private void SendMethodOnServer(Method method)
+        public void HitTheEnemy(Address address)
         {
-            string serializeMethod = method.Serialize();
-            byte[] methodByte = Encoding.Unicode.GetBytes(serializeMethod.ToCharArray());
-            form.ShowMessageBox(serializeMethod);
-            udpClient.Send(methodByte, methodByte.Length);
+            Method method = new Method(Method.MethodName.HitTheEnemy, address);
+            SendMethodOnServer(method);
         }
 
-        private void FromServer()
-        {   
-            try {
-                while (isStart)
-                {
-                    byte[] receive = udpClient.Receive(ref remoteIpEndPoint);
-                    string message = Encoding.Unicode.GetString(receive);
-                    CallMethod(Method.Deserialize(message));
-                }
-            }
-            catch (Exception e)
-            {
-                form.ShowMessageBox("Cannot listen server: " + e.Message);
-            }
+        public void ClientExit()
+        {
+            Method method = new Method(Method.MethodName.Exit, null);
+            SendMethodOnServer(method);
+            udpClient.Close();
+            isStart = false;
         }
+        #endregion
 
         private void CallMethod(Method method)
         {
@@ -107,7 +122,7 @@ namespace SeaBattleClient
                     ProcessStatusOver(ParamConvert.GetTurn(method[0]));
                     break;
                 case Method.MethodName.YourEnemyExit:
-                    form.SetLabelTurn("Выигрыш");
+                    form.LabelTurnText = "Выигрыш";
                     form.ShowMessageBox(ParamConvert.GetString(method[0]));
                     break;
             }
@@ -115,16 +130,15 @@ namespace SeaBattleClient
 
         private void ProcessTurn(Player.Turn turn)
         {
-            form.SetLabelTurn(turn + "");
             switch (turn)
             {
                 case Player.Turn.YOUR:
                     form.EnemyPanelEnamble = true;
-                    form.SetLabelTurn("ты");
+                    form.LabelTurnText = "ты";
                     break;
                 case Player.Turn.ENEMY:
                     form.EnemyPanelEnamble = false;
-                    form.SetLabelTurn("противник");
+                    form.LabelTurnText = "противник";
                     break;
             }
         }
@@ -135,21 +149,15 @@ namespace SeaBattleClient
             {
                 case Player.Turn.YOUR:
                     form.EnemyPanelEnamble = false;
-                    form.ShowMessageBox("Ты победил врага! Гуд");
-                    form.SetLabelTurn("Выигрыш");
+                    form.ShowMessageBox("Ты победил врага!");
+                    form.LabelTurnText = "Выигрыш";
                     break;
                 case Player.Turn.ENEMY:
                     form.EnemyPanelEnamble = false;
-                    form.ShowMessageBox("Ты проиграл! Нот Гуд");
-                    form.SetLabelTurn("Проигрыш");
+                    form.ShowMessageBox("Ты проиграл!");
+                    form.LabelTurnText = "Проигрыш";
                     break;
             }
-        }
-
-        public void HitTheEnemy(Address address)
-        {
-            Method method = new Method(Method.MethodName.HitTheEnemy, address);
-            SendMethodOnServer(method);
         }
 
         private void SetEnemyMap(StatusField[,] enemyMap)
@@ -157,12 +165,8 @@ namespace SeaBattleClient
             form.SetEnemyMap(enemyMap);
         }
 
-        public void ClientExit()
-        {
-            Method method = new Method(Method.MethodName.Exit, null);
-            SendMethodOnServer(method);
-            udpClient.Close();
-            isStart = false;
-        }
+        
+
+        
     }
 }

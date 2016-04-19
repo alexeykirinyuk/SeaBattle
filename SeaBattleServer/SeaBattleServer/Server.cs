@@ -16,6 +16,7 @@ namespace SeaBattleServer
         private List<Game> gameList = new List<Game>();
         private List<Player> playerList = new List<Player>();
         private IPAddress ipAddress;
+        private object block = new object();
 
         public Server(int port)
         {
@@ -60,17 +61,20 @@ namespace SeaBattleServer
                     EndPoint ip = new IPEndPoint(ipAddress, port);
                     var byteRec = sListener.ReceiveFrom(dataReceived, ref ip);
                     var find = playerList.Find((gamer) => gamer.Ip.Equals(ip));
+                    var message = Encoding.Unicode.GetString(RemoveBytes(dataReceived, byteRec));
+                    Method receiveMethod = Method.Deserialize(message);
+
                     if (find == null)
                     {
+                        if (receiveMethod.Name != Method.MethodName.SetShips) return;
                         Console.WriteLine("Connected: " + ip.ToString());
                         playerList.Add(new Player(ip));
                     }
-                    var message = Encoding.Unicode.GetString(RemoveBytes(dataReceived, byteRec));
-                    Console.WriteLine(message);
-                    //Thread callMethodThread = new Thread(new ParameterizedThreadStart(CallMethod));
-                    //callMethodThread.IsBackground = true;
-                    //callMethodThread.Start(new CallMethodClass(ip, GetMethod(message)));
-                    CallMethod(ip, Method.Deserialize(message));
+                    
+                    Console.WriteLine("From: " + ip + "; Method: " + receiveMethod);
+                    Thread callMethodThread = new Thread(new ParameterizedThreadStart(CallMethod));
+                    callMethodThread.IsBackground = true;
+                    callMethodThread.Start(new CallMethodParams(ip, receiveMethod));
                 }
                 catch (Exception e)
                 {
@@ -104,19 +108,27 @@ namespace SeaBattleServer
             {
                 player.Map.AddShip(ship);
             }
+
             if (playerList.Count % 2 == 0)
             {
-                StartGame();
+                lock (block)
+                {
+                    if (playerList.Count % 2 == 0)
+                    {
+                        StartGame();
+                    }
+                }
             }
         }
 
         private void StartGame()
         {
-            Console.WriteLine("Start Game");
 
             Game nGame = new Game(playerList[playerList.Count - 2], playerList[playerList.Count - 1]);
             gameList.Add(nGame);
             nGame.SetWhoseTurn(true);
+
+            Console.WriteLine("Start Game. Player1: " + nGame.Player1.Ip + "; Player2 :" + nGame.Player2.Ip);
 
             SendTurnToClients(nGame.Player1, nGame.Player2);
         }      
@@ -126,12 +138,18 @@ namespace SeaBattleServer
             foreach (Player player in players)
             {
                 Method setTurnMethod = new Method(Method.MethodName.SetTurn, ParamConvert.Convert(player.WhoseTurn));
-                SendMessage(setTurnMethod, player.Ip);
+                SendMethodToClient(setTurnMethod, player.Ip);
             }
         }
 
         private void HitTheEnemy(Player player, Address address)
         {
+            if (player.WhoseTurn != Player.Turn.YOUR)
+            {
+                SendMethodToClient(new Method(Method.MethodName.Message,
+                 ParamConvert.Convert("Сейчас не ваш ход")), player.Ip);
+                return;
+            }
             Player enemy = GetEnemy(player);
             KillResult killResult = enemy.Map.Kill(address);
 
@@ -143,8 +161,8 @@ namespace SeaBattleServer
                 case KillResult.Error:
                     methodForYour[0] = ParamConvert.Convert("Попробуй ещё раз.");
                     methodForYour[1] = ParamConvert.Convert(player.WhoseTurn);
-                    methodForYour[2] = ParamConvert.Convert(enemy.Map.GetMapForEnemy().StatusMap);
-                    SendMessage(methodForYour, player.Ip);
+                    methodForYour[2] = ParamConvert.Convert(enemy.Map.GetStatusFieldsForEnemy());
+                    SendMethodToClient(methodForYour, player.Ip);
                     return;
                 case KillResult.KillShip:
                     methodForYour[0] = ParamConvert.Convert("Ты уничтожил корабль врага!");
@@ -162,21 +180,22 @@ namespace SeaBattleServer
             }
             methodForYour[1] = ParamConvert.Convert(player.WhoseTurn);
             methodForEnemy[1] = ParamConvert.Convert(enemy.WhoseTurn);
-            methodForYour[2] = ParamConvert.Convert(enemy.Map.GetMapForEnemy().StatusMap);
+            methodForYour[2] = ParamConvert.Convert(enemy.Map.GetStatusFieldsForEnemy());
             methodForEnemy[2] = ParamConvert.Convert(enemy.Map.StatusMap);
             Console.WriteLine("Ход{" + player.Ip + ":" + player.WhoseTurn);
             Console.WriteLine("Ход{" + enemy.Ip + ":" + enemy.WhoseTurn);
 
-            SendMessage(methodForYour, player.Ip);
-            SendMessage(methodForEnemy, enemy.Ip);
+            SendMethodToClient(methodForYour, player.Ip);
+            SendMethodToClient(methodForEnemy, enemy.Ip);
 
-            GameOver(!enemy.Map.HasShip(), player, enemy);
+            if(!enemy.Map.HasShip())
+                GameOver(player, enemy);
         }
 
-        private void GameOver(bool isOver, Player player, Player enemy)
+        private void GameOver(Player player, Player enemy)
         {
-            SendMessage(new Method(Method.MethodName.GameOver, ParamConvert.Convert(Player.Turn.YOUR)), player.Ip);
-            SendMessage(new Method(Method.MethodName.GameOver, ParamConvert.Convert(Player.Turn.ENEMY)), enemy.Ip);
+            SendMethodToClient(new Method(Method.MethodName.GameOver, ParamConvert.Convert(Player.Turn.YOUR)), player.Ip);
+            SendMethodToClient(new Method(Method.MethodName.GameOver, ParamConvert.Convert(Player.Turn.ENEMY)), enemy.Ip);
             Console.WriteLine("Игра закончена!! Win: " + player.Ip.ToString() + ";\nЧистка играков...");
             gameList.Remove(GetGame(player));
             Console.WriteLine("Удаление...:" + player.Ip);
@@ -188,42 +207,25 @@ namespace SeaBattleServer
         private void PlayerExit(Player player)
         {
             Player enemy = GetEnemy(player);
-            SendMessage(new Method(Method.MethodName.GameOver, ParamConvert.Convert("Ваш враг вышел из игры.")), enemy.Ip);
+            SendMethodToClient(new Method(Method.MethodName.GameOver, ParamConvert.Convert("Ваш враг вышел из игры.")), enemy.Ip);
             Console.WriteLine(player.Ip + " вышел из игры.");
             Console.WriteLine(enemy.Ip + " - был врагом " + player.Ip);
             gameList.Remove(GetGame(enemy));
             playerList.Remove(player);
             playerList.Remove(enemy);
         }
-
-        /*
-        private class CallMethodClass
-        {
-            public EndPoint ip;
-            public Method method;
-            public CallMethodClass(EndPoint ip, Method method)
-            {
-                this.ip = ip;
-                this.method = method;
-            }
-        }
-        private void CallMethod(Object obj)
-        {
-            CallMethodClass cmc = (CallMethodClass)obj;
-            CallMethod(cmc.ip, cmc.method);
-            Console.WriteLine("New thread for: " + cmc.method.Name);
-        }
-         */
-
+   
         private Player GetPlayer(EndPoint ip)
         {
             Player find = playerList.Find((player) => player.Ip.Equals(ip));
             return find;
         }
+
         private Game GetGame(Player player)
         {
             return gameList.Find((game) => game.Player1.Ip.Equals(player.Ip) || game.Player2.Ip.Equals(player.Ip));
         }
+
         private Player GetEnemy(Player player)
         {
             Game game = GetGame(player);
@@ -234,6 +236,7 @@ namespace SeaBattleServer
                 enemy = game.Player1;
             return enemy;
         }
+
         private byte[] RemoveBytes(byte[] buf, int bytesReceived)
         {
             byte[] received = new byte[bytesReceived];
@@ -242,9 +245,29 @@ namespace SeaBattleServer
             return received;
         }
 
-        private void SendMessage(Method method, EndPoint ip)
+        private class CallMethodParams
+        {
+            public EndPoint ip;
+            public Method method;
+            public CallMethodParams(EndPoint ip, Method method)
+            {
+                this.ip = ip;
+                this.method = method;
+            }
+        }
+
+        private void CallMethod(Object obj)
+        {
+            CallMethodParams cmc = (CallMethodParams)obj;
+            Console.WriteLine("---\nНовый поток для: " + cmc.method.ToString());
+            CallMethod(cmc.ip, cmc.method);
+            Console.WriteLine("Поток для метода: " + cmc.method.ToString() + " завершился\n---");
+        }
+
+        private void SendMethodToClient(Method method, EndPoint ip)
         {
             string serializeMethod = method.Serialize();
+            Console.WriteLine("To: " + ip + "; Method: " + method.ToString());
             byte[] methodByte = Encoding.Unicode.GetBytes(serializeMethod.ToCharArray());
             sListener.SendTo(methodByte, ip);
         }

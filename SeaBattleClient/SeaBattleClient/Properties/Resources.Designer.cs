@@ -63,9 +63,9 @@ namespace SeaBattleClient.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Background {
+        internal static System.Drawing.Bitmap DeadEmpty {
             get {
-                object obj = ResourceManager.GetObject("Background", resourceCulture);
+                object obj = ResourceManager.GetObject("DeadEmpty", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,19 @@ namespace SeaBattleClient.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BlowUpShip {
+        internal static System.Drawing.Bitmap DeadPartShip {
             get {
-                object obj = ResourceManager.GetObject("BlowUpShip", resourceCulture);
+                object obj = ResourceManager.GetObject("DeadPartShip", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeadShip {
+            get {
+                object obj = ResourceManager.GetObject("DeadShip", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -86,26 +96,6 @@ namespace SeaBattleClient.Properties {
         internal static System.Drawing.Bitmap Empty {
             get {
                 object obj = ResourceManager.GetObject("Empty", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap KilledEmpty {
-            get {
-                object obj = ResourceManager.GetObject("KilledEmpty", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap KilledShip {
-            get {
-                object obj = ResourceManager.GetObject("KilledShip", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -2,6 +2,5 @@ C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLib
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\SeaBattleLibrary.pdb
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\obj\Debug\SeaBattleLibrary.dll
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\obj\Debug\SeaBattleLibrary.pdb
-C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\obj\Debug\SeaBattleLibrary.csprojResolveAssemblyReference.cache
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\Newtonsoft.Json.dll
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\Newtonsoft.Json.xml

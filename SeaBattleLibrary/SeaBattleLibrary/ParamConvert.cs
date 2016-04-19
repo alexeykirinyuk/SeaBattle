@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace SeaBattleLibrary
@@ -57,10 +55,10 @@ namespace SeaBattleLibrary
         #endregion
 
         #region wrapper classes
-        [JsonObject("PS")]
+        [JsonObject("ParamString")]
         public class ParamString : Param
         {
-            [JsonProperty("DS")]
+            [JsonProperty("DataString")]
             private string data;
 
             [JsonIgnore]
@@ -76,14 +74,17 @@ namespace SeaBattleLibrary
             public ParamString(string data)
             {
                 this.data = data;
-                this.type = "DS";
+            }
+            public override string ToString()
+            {
+                return "ParamString";
             }
         }
 
-        [JsonObject("PFA")]
+        [JsonObject("ParamFields")]
         public class ParamFieldArray : Param
         {
-            [JsonProperty("DSF")]
+            [JsonProperty("DataFields")]
             private StatusField[,] data;
 
             [JsonIgnore]
@@ -99,14 +100,17 @@ namespace SeaBattleLibrary
             public ParamFieldArray(StatusField[,] data)
             {
                 this.data = data;
-                this.type = "DSF";
+            }
+            public override string ToString()
+            {
+                return "ParamFieldArray";
             }
         }
         
-        [JsonObject("PT")]
+        [JsonObject("ParamTurn")]
         public class ParamTurn : Param
         {
-            [JsonProperty("DT")]
+            [JsonProperty("DataTurn")]
             private Player.Turn data;
 
             [JsonIgnore]
@@ -122,14 +126,17 @@ namespace SeaBattleLibrary
             public ParamTurn(Player.Turn data)
             {
                 this.data = data;
-                this.type = "DT";
+            }
+            public override string ToString()
+            {
+                return "ParamTurn";
             }
         }
         
-        [JsonObject("PSL")]
+        [JsonObject("ParamShips")]
         public class ParamShipList : Param
         {
-            [JsonProperty("DSL")]
+            [JsonProperty("DataShips")]
             private List<Ship> data;
             
             [JsonIgnore]
@@ -145,7 +152,11 @@ namespace SeaBattleLibrary
             public ParamShipList(List<Ship> data)
             {
                 this.data = data;
-                this.type = "DSL";
+            }
+
+            public override string ToString()
+            {
+                return "ParamShipList";
             }
         }
         #endregion

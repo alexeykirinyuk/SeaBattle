@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace SeaBattleLibrary
 {
-    [JsonObject("S")]
+    [JsonObject("Ship")]
     public class Ship: Param
     {
-        [JsonProperty("AA")]
+        [JsonProperty("AddressArray")]
         private Address[] addressArray;
 
         [JsonIgnore]
@@ -54,8 +51,8 @@ namespace SeaBattleLibrary
             int i = 0;
             foreach (Address address in addressArray)
             {
-                x[i] = address.X;
-                y[i] = address.Y;
+                x[i] = address.I;
+                y[i] = address.J;
                 i++;
             }
 

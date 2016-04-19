@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace SeaBattleLibrary
 {
-    [JsonObject("M")]
+    [JsonObject("Method")]
     public class Method: Param
     {
-        [JsonProperty("N")]
+        [JsonProperty("Name")]
         private MethodName name;
-        [JsonProperty("P")]
+        [JsonProperty("Paramts")]
         private Param[] paramts;
 
         [JsonIgnore]
@@ -33,17 +30,18 @@ namespace SeaBattleLibrary
         }
 
         public Method() { }
-        public Method(MethodName Name) {
-            this.name = Name;
+        public Method(MethodName name) {
+            this.name = name;
         }
-        public Method(MethodName Name, params Param[] paramts)
+        public Method(MethodName name, params Param[] paramts)
         {
-            this.name = Name;
+            this.name = name;
             this.paramts = paramts;
         }
-        public Method(MethodName Name, int lengthParams)
+        public Method(MethodName name, int lengthParams)
         {
-            paramts = new Param[lengthParams];
+            this.name = name;
+            this.paramts = new Param[lengthParams];
         }
 
         public Param this[int i]
@@ -60,31 +58,45 @@ namespace SeaBattleLibrary
             }
         }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder(Name.ToString());
+            if (paramts == null) return sb.ToString() + "();";
+            sb.Append("(");
+            for (int i = 0; i < paramts.Length; i++)
+            {
+                sb.Append("Params[").Append(i).Append("]: ").Append(paramts[i].ToString());
+                if(i != paramts.Length - 1) sb.Append(",");
+            }
+            sb.Append(");");
+            return sb.ToString();
+        }
+
         public string Serialize()
         {
-            JsonConverter[] converts = { new FooConverter() };
-            return  JsonConvert.SerializeObject(this, new JsonSerializerSettings() { Converters = converts });
+            return JsonConvert.SerializeObject(this, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
         } 
             
         public static Method Deserialize(string serializedString)
         {
-            JsonConverter[] converts = { new FooConverter() };
-            return JsonConvert.DeserializeObject<Method>(serializedString, new JsonSerializerSettings() { Converters = converts });
+            return JsonConvert.DeserializeObject<Method>(serializedString, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
         }
 
         public enum MethodName
         {
             //методы сервера
-            SetShips,               //установить корабли (Param[0]: List<Ship>)
-            Exit,                   //игрок вышел из игры ()
-            HitTheEnemy,            //ударить противника (Param[0]: Address)
+            SetShips = 0,               //установить корабли (Param[0]: List<Ship> myListShip)
+            Exit = 1,                   //игрок вышел из игры (null)
+            HitTheEnemy = 2,            //ударить противника (Param[0]: Address addressForHit)
             //методы клиента
-            SetTurn,                //установить чей ход (Param[0]: Turn)
-            Message,                //показать диалог с сообщением (Param[0]: ParamString)
-            SetResultAfterYourHit,  //установить результаты после твоего удара  (Param[0]: ParamString, Param[1]: Turn, Param[2]: ParamFieldArray)
-            SetResultAfterEnemyHit, //установить результаты после удара врага (Param[0]: ParamString, Param[1]: Turn, Param[2]: ParamFieldArray)
-            GameOver,               //игра окончена (Param[0]: ParamTurn)
-            YourEnemyExit           //ваш враг вышел из игры
+            SetTurn = 3,                //установить чей ход (Param[0]: Turn whoseTurn)
+            Message = 4,                //показать диалог с сообщением (Param[0]: ParamString message)
+            SetResultAfterYourHit = 5,  //установить результаты после твоего удара  (Param[0]: ParamString message,
+                                        //Param[1]: Turn whoseTurn, Param[2]: ParamFieldArray mapEnemy)
+            SetResultAfterEnemyHit = 6, //установить результаты после удара врага (Param[0]: ParamString message,
+                                        //Param[1]: Turn whoseTurn, Param[2]: ParamFieldArray mapYour)
+            GameOver = 7,               //игра окончена (Param[0]: ParamString message, Param[1]: ParamTurn whoWin)
+            YourEnemyExit = 8           //ваш враг вышел из игры (null)
         }
         public class IncorrectParamsException : Exception
         {
@@ -92,41 +104,5 @@ namespace SeaBattleLibrary
         }
     }
 
-    public class FooConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return (objectType == typeof(Param));
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            JObject jo = JObject.Load(reader);
-            if (jo["type"].Value<string>() == "A")
-                return jo.ToObject<Address>(serializer);
-
-            if (jo["type"].Value<string>() == "M")
-                return jo.ToObject<Method>(serializer);
-            if (jo["type"].Value<string>() == "PS")
-                return jo.ToObject<ParamConvert.ParamString>(serializer);
-            if (jo["type"].Value<string>() == "PFA")
-                return jo.ToObject<ParamConvert.ParamShipList>(serializer);
-            if (jo["type"].Value<string>() == "PT")
-                return jo.ToObject<ParamConvert.ParamTurn>(serializer);
-            if (jo["type"].Value<string>() == "PSL")
-                return jo.ToObject<ParamConvert.ParamShipList>(serializer);
-
-            return null;
-        }
-
-        public override bool CanWrite
-        {
-            get { return false; }
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    
 }

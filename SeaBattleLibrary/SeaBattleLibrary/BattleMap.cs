@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace SeaBattleLibrary
 {
@@ -16,22 +13,22 @@ namespace SeaBattleLibrary
         {
             get
             {
-                return statusMap[address.X, address.Y];
+                return statusMap[address.I, address.J];
             }
             private set
             {
-                statusMap[address.X, address.Y] = value;
+                statusMap[address.I, address.J] = value;
             }
         }
-        public StatusField this[int x, int y]
+        public StatusField this[int i, int j]
         {
             get
             {
-                return statusMap[x, y];
+                return statusMap[i, j];
             }
             private set
             {
-                statusMap[x, y] = value;
+                statusMap[i, j] = value;
             }
         }
         public Ship this[int indexShip]
@@ -87,30 +84,33 @@ namespace SeaBattleLibrary
                     break;
                 case StatusField.Ship:
                     this[address] = StatusField.DeadPartShip;
-                    if (isDeadShip(address))
+                    if (IsDeadShip(address))
                     {
                         killed = KillResult.KillShip;
                         SetDeadShip(address);
                     }
-                    killed = KillResult.KillPartShip;
+                    else
+                    {
+                        killed = KillResult.KillPartShip;
+                    }                    
                     break;
             }
             return killed;
         }
-        public BattleMap GetMapForEnemy()
+        public StatusField[,] GetStatusFieldsForEnemy()
         {
-            BattleMap mapForEnemy = new BattleMap();
+            StatusField[,] mapForEnemy = new StatusField[N, N];
             for (int x = 0; x < N; x++)
             {
                 for (int y = 0; y < N; y++)
                 {
-                    if (mapForEnemy[x, y] == StatusField.Ship)
+                    if (this[x, y] == StatusField.Ship)
                     {
                         mapForEnemy[x, y] = StatusField.Empty;
                     }
                     else
                     {
-                        mapForEnemy[x, y] = mapForEnemy[x, y];
+                        mapForEnemy[x, y] = this[x, y];
                     }
                 }
             }
@@ -118,7 +118,7 @@ namespace SeaBattleLibrary
         }
         public bool HasShip()
         {
-            return ships.Count != 0;
+            return ships.Count > 0;
         }
 
         private void SetDeadShip(Address address)
@@ -131,7 +131,7 @@ namespace SeaBattleLibrary
             }
             ships.Remove(ship);
         }
-        private bool isDeadShip(Address address)
+        private bool IsDeadShip(Address address)
         {
             Ship killedShip = GetShipFromAddressField(address);
 
@@ -160,6 +160,20 @@ namespace SeaBattleLibrary
                 }
             }
             return resultShip;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder("");
+            for(int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    sb.Append(statusMap[i, j]).Append(" ");
+                }
+                sb.Append('\n');
+            }
+            return sb.ToString();
         }
 
     }
