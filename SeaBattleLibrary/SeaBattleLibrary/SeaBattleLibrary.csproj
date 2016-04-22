@@ -47,13 +47,16 @@
     <Compile Include="Address.cs" />
     <Compile Include="AddressIndexOverException.cs" />
     <Compile Include="BattleMap.cs" />
+    <Compile Include="src\Player\Bot.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="KillResult.cs" />
     <Compile Include="Method.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="src\Player\NormalBot.cs" />
+    <Compile Include="src\Player\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Param.cs" />
     <Compile Include="Ship.cs" />
+    <Compile Include="src\Player\SmartBot.cs" />
+    <Compile Include="src\Player\StupidBot.cs" />
     <Compile Include="StatusField.cs" />
     <Compile Include="ParamConvert.cs" />
   </ItemGroup>

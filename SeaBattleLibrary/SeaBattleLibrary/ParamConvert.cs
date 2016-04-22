@@ -7,28 +7,36 @@ namespace SeaBattleLibrary
     public class ParamConvert
     {
         #region convert method
-        public static Param Convert(String convertString)
+        /*
+        public static Param Convert(string convertString)
         {
-            return new ParamString(convertString);
+            return new ParamData<string>(convertString);
         }
 
         public static Param Convert(StatusField[,] convertStatusFieldArray)
-        {
-            return new ParamFieldArray(convertStatusFieldArray);
-        }
+            
 
-        public static Param Convert(Player.Turn convertTurn)
-        {
-            return new ParamTurn(convertTurn);
-        }
+        
 
         public static Param Convert(List<Ship> convertShipList)
         {
             return new ParamShipList(convertShipList);
         }
+
+        public static Param Convert(Game.Regime convertGameRegime)
+        {
+            return new ParamGameRegime(convertGameRegime);
+        }
+        */
+
+        public static Param Convert<T>(T data)
+        {
+            return new ParamData<T>(data);
+        }
         #endregion
 
         #region deconvert method
+        /*
         public static String GetString(Param paramString)
         {
             ParamString str = (ParamString)paramString;
@@ -52,9 +60,21 @@ namespace SeaBattleLibrary
             ParamShipList shipList = (ParamShipList)paramShipList;
             return shipList.Data;
         }
+
+        public static Game.Regime GetGameRegime(Param paramGameRegime)
+        {
+            return ((ParamGameRegime)paramGameRegime).Data;
+        }
+        */
+
+        public static T GetData<T>(Param param)
+        {
+            return ((ParamData<T>)param).Data;
+        }
         #endregion
 
         #region wrapper classes
+        /*
         [JsonObject("ParamString")]
         public class ParamString : Param
         {
@@ -149,6 +169,7 @@ namespace SeaBattleLibrary
             }
 
             public ParamShipList() { }
+
             public ParamShipList(List<Ship> data)
             {
                 this.data = data;
@@ -159,6 +180,66 @@ namespace SeaBattleLibrary
                 return "ParamShipList";
             }
         }
+
+        [JsonObject("ParamGameRegime")]
+        public class ParamGameRegime: Param
+        {
+            [JsonProperty("DataGameRegime")]
+            private Game.Regime data;
+
+            public Game.Regime Data
+            {
+                get
+                {
+                    return data;
+                }
+            }
+            
+            public ParamGameRegime() { }
+
+            public ParamGameRegime(Game.Regime data)
+            {
+                this.data = data;
+            }
+
+            public override string ToString()
+            {
+                return "ParamGameRegime";
+            }
+        }
+        */
+
+        [JsonObject("ParamData")]
+        public class ParamData<T>: Param
+        {
+            [JsonProperty("Data")]
+            private T data;
+
+            [JsonIgnore]
+            public T Data
+            {
+                get
+                {
+                    return data;
+                }
+            }
+
+            public ParamData() { }
+
+            public ParamData(T data)
+            {
+                this.data = data;
+            }
+
+            public override string ToString()
+            {
+                return data.GetType().ToString();
+            }
+        }
+
+        
         #endregion
     }
+
+    public interface Param { }
 }

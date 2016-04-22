@@ -13,7 +13,7 @@ namespace SeaBattleLibrary
         {
             get
             {
-                return statusMap[address.I, address.J];
+                return statusMap[address.I, address.J];    
             }
             private set
             {
@@ -69,10 +69,12 @@ namespace SeaBattleLibrary
             }
             ships.Add(ship);
         }
+
         public void AddShip(Ship ship)
         {
             AddShip(ship.AddressArray);
         }
+
         public KillResult Kill(Address address)
         {
             KillResult killed = KillResult.Error;
@@ -97,6 +99,7 @@ namespace SeaBattleLibrary
             }
             return killed;
         }
+
         public StatusField[,] GetStatusFieldsForEnemy()
         {
             StatusField[,] mapForEnemy = new StatusField[N, N];
@@ -116,6 +119,7 @@ namespace SeaBattleLibrary
             }
             return mapForEnemy;
         }
+
         public bool HasShip()
         {
             return ships.Count > 0;
@@ -131,6 +135,7 @@ namespace SeaBattleLibrary
             }
             ships.Remove(ship);
         }
+
         private bool IsDeadShip(Address address)
         {
             Ship killedShip = GetShipFromAddressField(address);

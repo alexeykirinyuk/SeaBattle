@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace SeaBattleLibrary
+namespace SeaBattleLibrary.src.Player
 {
     public class Player
     {
@@ -34,7 +34,7 @@ namespace SeaBattleLibrary
             }
         }
 
-        public Player() {}
+        public Player() { map = new BattleMap(); }
         public Player(EndPoint ip)
         {
             this.ip = ip;

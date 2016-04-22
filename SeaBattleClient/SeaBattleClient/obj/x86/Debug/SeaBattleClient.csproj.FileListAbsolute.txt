@@ -10,3 +10,5 @@ C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClie
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\Newtonsoft.Json.xml
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\SeaBattleLibrary.dll
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\SeaBattleLibrary.pdb
+C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.RegimeDialog.resources
+C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.StatisticForm.resources

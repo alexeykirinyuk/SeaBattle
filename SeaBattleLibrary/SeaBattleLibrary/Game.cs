@@ -1,49 +1,50 @@
-﻿namespace SeaBattleLibrary
+﻿using SeaBattleLibrary.src.Player;
+
+namespace SeaBattleLibrary
 {
     public class Game
     {
-        private Player player1;
-        private Player player2;
-
         public Player Player1
         {
-            get
-            {
-                return player1;
-            }
+            get; private set;
         }
         public Player Player2
         {
-            get
-            {
-                return player2;
-            }
+            get; private set;
         }
 
-        public Game() { }
-        public Game(Player player1, Player player2)
+        public Regime Regm { get; private set; }
+        
+        public Game(Player player1, Player player2, Regime regime)
         {
-            this.player1 = player1;
-            this.player2 = player2;
+            this.Player1 = player1;
+            this.Player2 = player2;
+            this.Regm = regime;
         }
+
         public void ReverseTurn()
         {
-            Player.Turn st = player1.WhoseTurn;
-            player1.WhoseTurn = player2.WhoseTurn;
-            player2.WhoseTurn = st;
+            Player.Turn st = Player1.WhoseTurn;
+            Player1.WhoseTurn = Player2.WhoseTurn;
+            Player2.WhoseTurn = st;
         }
         public void SetWhoseTurn(bool player)
         {
             if (player)
             {
-                player1.WhoseTurn = Player.Turn.YOUR;
-                player2.WhoseTurn = Player.Turn.ENEMY;
+                Player1.WhoseTurn = Player.Turn.YOUR;
+                Player2.WhoseTurn = Player.Turn.ENEMY;
             }
             else
             {
-                player2.WhoseTurn = Player.Turn.YOUR;
-                player1.WhoseTurn = Player.Turn.ENEMY;
+                Player2.WhoseTurn = Player.Turn.YOUR;
+                Player1.WhoseTurn = Player.Turn.ENEMY;
             }
+        }
+
+        public enum Regime
+        {
+            RealPerson, StupidBot, NormalBot, SmartBot
         }
     }
 }

@@ -5,10 +5,11 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using SeaBattleLibrary;
+using SeaBattleLibrary.src.Player;
 
 namespace SeaBattleClient
 {
-    class BattleCient
+    public class BattleCient
     {  
         private int port;
         private string hostName;
@@ -39,7 +40,7 @@ namespace SeaBattleClient
             }
             catch (Exception)
             {
-                form.ShowMessageBox("Error, No connection to the BattleServer");
+                form.BattleDialog("Error, No connection to the BattleServer");
             }
         }
 
@@ -56,7 +57,7 @@ namespace SeaBattleClient
             }
             catch (Exception e)
             {
-                form.ShowMessageBox("Cannot listen server: " + e.Message);
+                form.BattleDialog("Cannot listen server: " + e.Message);
             }
         }
 
@@ -64,28 +65,27 @@ namespace SeaBattleClient
         {
             string serializeMethod = method.Serialize();
             byte[] methodByte = Encoding.Unicode.GetBytes(serializeMethod.ToCharArray());
-            form.ShowMessageBox(method.ToString());
             udpClient.Send(methodByte, methodByte.Length);
         }
 
         #region server's methods
-        public void SendShips(List<Ship> ships)
+        public void StartGame(List<Ship> ships, Game.Regime regime)
         {
             try
             {
                 if (!isStart) return;
-                Method method = new Method(Method.MethodName.SetShips, ParamConvert.Convert(ships));
+                Method method = new Method(Method.MethodName.StartGame, ParamConvert.Convert(ships), ParamConvert.Convert(regime));
                 SendMethodOnServer(method);
             }
             catch (Exception e)
             {
-                form.ShowMessageBox("Error->" + e.Message);
+                form.BattleDialog("Error->" + e.Message);
             }
         }
 
         public void HitTheEnemy(Address address)
         {
-            Method method = new Method(Method.MethodName.HitTheEnemy, address);
+            Method method = new Method(Method.MethodName.HitTheEnemy, ParamConvert.Convert(address));
             SendMethodOnServer(method);
         }
 
@@ -103,27 +103,27 @@ namespace SeaBattleClient
             switch (method.Name)
             {
                 case Method.MethodName.SetTurn:
-                    ProcessTurn(ParamConvert.GetTurn(method[0]));
+                    ProcessTurn(ParamConvert.GetData<Player.Turn>(method[0]));
                     break;
                 case Method.MethodName.Message:
-                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
+                    form.BattleDialog(ParamConvert.GetData<string>(method[0]));
                     break;
                 case Method.MethodName.SetResultAfterYourHit:
-                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
-                    ProcessTurn(ParamConvert.GetTurn(method[1]));
-                    form.SetEnemyMap(ParamConvert.GetFieldArray(method[2]));
+                    form.BattleDialog(ParamConvert.GetData<string>(method[0]));
+                    ProcessTurn(ParamConvert.GetData<Player.Turn>(method[1]));
+                    form.SetEnemyMap(ParamConvert.GetData<StatusField[,]>(method[2]));
                     break;
                 case Method.MethodName.SetResultAfterEnemyHit:
-                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
-                    ProcessTurn(ParamConvert.GetTurn(method[1]));
-                    form.SetMyMap(ParamConvert.GetFieldArray(method[2]));
+                    form.BattleDialog(ParamConvert.GetData<string>(method[0]));
+                    ProcessTurn(ParamConvert.GetData<Player.Turn>(method[1]));
+                    form.SetMyMap(ParamConvert.GetData<StatusField[,]>(method[2]));
                     break;
                 case Method.MethodName.GameOver:
-                    ProcessStatusOver(ParamConvert.GetTurn(method[0]));
+                    ProcessStatusOver(ParamConvert.GetData<Player.Turn>(method[0]));
                     break;
                 case Method.MethodName.YourEnemyExit:
                     form.LabelTurnText = "Выигрыш";
-                    form.ShowMessageBox(ParamConvert.GetString(method[0]));
+                    form.BattleDialog(ParamConvert.GetData<String>(method[0]));
                     break;
             }
         }
@@ -149,12 +149,12 @@ namespace SeaBattleClient
             {
                 case Player.Turn.YOUR:
                     form.EnemyPanelEnamble = false;
-                    form.ShowMessageBox("Ты победил врага!");
+                    form.BattleDialog("Ты победил врага!");
                     form.LabelTurnText = "Выигрыш";
                     break;
                 case Player.Turn.ENEMY:
                     form.EnemyPanelEnamble = false;
-                    form.ShowMessageBox("Ты проиграл!");
+                    form.BattleDialog("Ты проиграл!");
                     form.LabelTurnText = "Проигрыш";
                     break;
             }

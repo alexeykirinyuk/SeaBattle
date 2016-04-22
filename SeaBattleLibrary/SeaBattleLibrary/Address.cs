@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace SeaBattleLibrary
 {
     [JsonObject("Address")]
-    public class Address: Param
+    public class Address: IEquatable<Address>
     {
         [JsonProperty("I")]
         private int i;
@@ -49,13 +49,15 @@ namespace SeaBattleLibrary
             this.J = j;
         }
 
+        public override bool Equals(object obj)
+        {
+            return base.Equals((Address)obj);
+        }
+
         public bool Equals(Address address)
         {
-            return i == address.i && j == address.j;
-        }
-        public override string ToString()
-        {
-            return "Address";
+            if (address == null) return false;
+            else return i == address.i && j == address.j;
         }
 
         public bool CanPutShip(List<Ship> addedShips)
@@ -63,15 +65,31 @@ namespace SeaBattleLibrary
             bool can = true;
             foreach (Ship ship in addedShips)
             {
-                for (int i = 0; i < ship.Length; i++)
+                for (int index = 0; index < ship.Length; index++)
                 {
-                    can &= !(Equals(ship[i]));
-                    bool xEqualYBeside = this.i == ship[i].i && Math.Abs(j - ship[i].j) == 1;
-                    bool yEqualXBeside = j == ship[i].j && Math.Abs(this.i - ship[i].i) == 1;
-                    can &= !(xEqualYBeside || yEqualXBeside);
+                    can &= !(Equals(ship[index]));
+                    bool xEqualYBeside = i == ship[index].i && Math.Abs(j - ship[index].j) == 1;
+                    bool yEqualXBeside = j == ship[index].j && Math.Abs(i - ship[index].i) == 1;
+                    bool RightTop = i - 1 == ship[index].i && j + 1== ship[index].j;
+                    bool LeftTop = i - 1 == ship[index].i && j - 1 == ship[index].j;
+                    bool RightDown = i + 1 == ship[index].i && j + 1 == ship[index].j;
+                    bool LeftDown = i + 1 == ship[index].i && j - 1 == ship[index].j;
+                    can &= !(xEqualYBeside || yEqualXBeside || RightDown || RightTop || LeftDown || LeftTop);
                 }
             }
             return can;
+        }
+
+        public override int GetHashCode()
+        {
+            return i*10+j;
+        }
+
+        public override string ToString()
+        {
+            int iAbs = Math.Abs(i);
+            char iChar = (char)((int)'А' + iAbs);
+            return iChar + (j+1).ToString();
         }
     }
 }

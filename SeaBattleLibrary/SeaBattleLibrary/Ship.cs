@@ -17,6 +17,8 @@ namespace SeaBattleLibrary
                 return addressArray.Length;
             }
         }
+
+        [JsonIgnore]
         internal Address[] AddressArray
         {
             get
@@ -26,6 +28,7 @@ namespace SeaBattleLibrary
         }
 
         public Ship() { }
+
         public Ship(int length)
         {
             addressArray = new Address[length];
@@ -43,6 +46,7 @@ namespace SeaBattleLibrary
                 addressArray[i] = value;
             }
         }
+
         public bool isNormalShip()
         {
             if (Length == 1) return true;

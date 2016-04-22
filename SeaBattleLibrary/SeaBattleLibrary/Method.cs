@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace SeaBattleLibrary
 {
     [JsonObject("Method")]
-    public class Method: Param
+    public class Method
     {
         [JsonProperty("Name")]
         private MethodName name;
@@ -30,14 +30,17 @@ namespace SeaBattleLibrary
         }
 
         public Method() { }
+
         public Method(MethodName name) {
             this.name = name;
         }
+
         public Method(MethodName name, params Param[] paramts)
         {
             this.name = name;
             this.paramts = paramts;
         }
+
         public Method(MethodName name, int lengthParams)
         {
             this.name = name;
@@ -65,8 +68,11 @@ namespace SeaBattleLibrary
             sb.Append("(");
             for (int i = 0; i < paramts.Length; i++)
             {
-                sb.Append("Params[").Append(i).Append("]: ").Append(paramts[i].ToString());
-                if(i != paramts.Length - 1) sb.Append(",");
+                if (paramts[i] != null)
+                {
+                    sb.Append("Params[").Append(i).Append("]: ").Append(paramts[i].ToString());
+                    if (i != paramts.Length - 1) sb.Append(",");
+                }
             }
             sb.Append(");");
             return sb.ToString();
@@ -85,7 +91,7 @@ namespace SeaBattleLibrary
         public enum MethodName
         {
             //методы сервера
-            SetShips = 0,               //установить корабли (Param[0]: List<Ship> myListShip)
+            StartGame = 0,               //установить корабли (Param[0]: ParamShipList myListShip, Param[1]: ParamGameRegim gameRegim)
             Exit = 1,                   //игрок вышел из игры (null)
             HitTheEnemy = 2,            //ударить противника (Param[0]: Address addressForHit)
             //методы клиента
@@ -98,6 +104,7 @@ namespace SeaBattleLibrary
             GameOver = 7,               //игра окончена (Param[0]: ParamString message, Param[1]: ParamTurn whoWin)
             YourEnemyExit = 8           //ваш враг вышел из игры (null)
         }
+
         public class IncorrectParamsException : Exception
         {
             public IncorrectParamsException(): base("Не корректные параметры для метода") {}
