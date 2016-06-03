@@ -164,9 +164,5 @@ namespace SeaBattleClient
         {
             form.SetEnemyMap(enemyMap);
         }
-
-        
-
-        
     }
 }

@@ -15,6 +15,7 @@ namespace SeaBattleLibrary.src.Player
                 return map;
             } 
         }
+
         public EndPoint Ip
         {
             get
@@ -22,6 +23,7 @@ namespace SeaBattleLibrary.src.Player
                 return ip;
             }
         }
+
         public Turn WhoseTurn
         {
             get
@@ -35,6 +37,7 @@ namespace SeaBattleLibrary.src.Player
         }
 
         public Player() { map = new BattleMap(); }
+
         public Player(EndPoint ip)
         {
             this.ip = ip;

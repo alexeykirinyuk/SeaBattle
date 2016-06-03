@@ -12,3 +12,16 @@ C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClie
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\SeaBattleLibrary.pdb
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.RegimeDialog.resources
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.StatisticForm.resources
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.exe
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\SeaBattleClient.exe
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\SeaBattleClient.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\Newtonsoft.Json.dll
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\Newtonsoft.Json.xml
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\SeaBattleLibrary.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.csprojResolveAssemblyReference.cache
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.BattleForm.resources
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.Properties.Resources.resources
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.RegimeDialog.resources
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.StatisticForm.resources
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.csproj.GenerateResource.Cache

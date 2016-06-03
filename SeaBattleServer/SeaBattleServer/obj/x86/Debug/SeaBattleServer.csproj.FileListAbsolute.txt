@@ -9,3 +9,13 @@ C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServ
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.csproj.GenerateResource.Cache
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.exe
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.exe
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\SeaBattleServer.exe
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\SeaBattleServer.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\SeaBattleLibrary.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.csprojResolveAssemblyReference.cache
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.Properties.Resources.resources
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.csproj.GenerateResource.Cache

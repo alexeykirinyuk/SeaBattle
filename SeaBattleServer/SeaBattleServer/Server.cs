@@ -246,6 +246,7 @@ namespace SeaBattleServer
                 case KillResult.Error:
                     methodForYour[0] = ParamConvert.Convert("Попробуй ещё раз. (" + address.ToString() + ")");
                     methodForYour[1] = ParamConvert.Convert(player.WhoseTurn);
+                    methodForYour[2] = ParamConvert.Convert(enemy.Map.GetStatusFieldsForEnemy());
                     SendMethodToClient(methodForYour, player.Ip);
                     return methodForYour;
                 case KillResult.KillShip:
