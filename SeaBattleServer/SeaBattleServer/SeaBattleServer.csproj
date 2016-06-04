@@ -40,7 +40,7 @@
     </Reference>
     <Reference Include="SeaBattleLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\SeaBattleLibrary.dll</HintPath>
+      <HintPath>..\..\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\SeaBattleLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,6 +51,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BattleMap.cs" />
+    <Compile Include="BotHandler.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="Handler.cs" />
+    <Compile Include="KillResult.cs" />
+    <Compile Include="PlayerHandler.cs" />
+    <Compile Include="Player\Bot.cs" />
+    <Compile Include="Player\NormalBot.cs" />
+    <Compile Include="Player\Player.cs" />
+    <Compile Include="Player\SmartBot.cs" />
+    <Compile Include="Player\StupidBot.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

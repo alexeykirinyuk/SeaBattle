@@ -55,7 +55,7 @@
     </Reference>
     <Reference Include="SeaBattleLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\SeaBattleLibrary.dll</HintPath>
+      <HintPath>..\..\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\SeaBattleLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -90,19 +90,23 @@ namespace SeaBattleLibrary
 
         public enum MethodName
         {
-            //методы сервера
-            StartGame = 0,               //установить корабли (Param[0]: ParamShipList myListShip, Param[1]: ParamGameRegim gameRegim)
-            Exit = 1,                   //игрок вышел из игры (null)
+            #region server's methods
+            StartGame = 0,              // Начать игру (Param[0]: ShipList myListShip, Param[1]: GameRegim gameRegim)
+            Exit = 1,                   // Игрок вышел из игры (null)
             HitTheEnemy = 2,            //ударить противника (Param[0]: Address addressForHit)
-            //методы клиента
-            SetTurn = 3,                //установить чей ход (Param[0]: Turn whoseTurn)
-            Message = 4,                //показать диалог с сообщением (Param[0]: ParamString message)
-            SetResultAfterYourHit = 5,  //установить результаты после твоего удара  (Param[0]: ParamString message,
+            #endregion
+
+            #region client's methods
+            GetStartGame = 3,           // Запрос начала игры ()
+            SetTurn = 4,                //установить чей ход (Param[0]: Turn whoseTurn)
+            Message = 5,                //показать диалог с сообщением (Param[0]: ParamString message)
+            SetResultAfterYourHit = 6,  //установить результаты после твоего удара  (Param[0]: ParamString message,
                                         //Param[1]: Turn whoseTurn, Param[2]: ParamFieldArray mapEnemy)
-            SetResultAfterEnemyHit = 6, //установить результаты после удара врага (Param[0]: ParamString message,
+            SetResultAfterEnemyHit = 7, //установить результаты после удара врага (Param[0]: ParamString message,
                                         //Param[1]: Turn whoseTurn, Param[2]: ParamFieldArray mapYour)
-            GameOver = 7,               //игра окончена (Param[0]: ParamString message, Param[1]: ParamTurn whoWin)
-            YourEnemyExit = 8           //ваш враг вышел из игры (null)
+            GameOver = 8,               //игра окончена (Param[0]: ParamString message, Param[1]: ParamTurn whoWin)
+            YourEnemyExit = 9           //ваш враг вышел из игры (null)
+            #endregion
         }
 
         public class IncorrectParamsException : Exception

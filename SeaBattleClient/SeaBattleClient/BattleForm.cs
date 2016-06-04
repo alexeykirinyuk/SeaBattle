@@ -175,8 +175,7 @@ namespace SeaBattleClient
             RegimeDialog dialog = new RegimeDialog();
             dialog.ShowDialog();
 
-            client = new BattleCient("127.0.0.1", 25, this);
-            client.StartGame(shipsBuf, dialog.Result);
+            client = new BattleCient(this, shipsBuf, dialog.Result);
             buttonStartGame.Enabled = false;
         }
 
@@ -324,7 +323,10 @@ namespace SeaBattleClient
             }
         }
 
-        
+        private void button1_Click(object sender, EventArgs e)
+        {
+            buttonStartGame.Enabled = true;
+        }
     }
     
     

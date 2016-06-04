@@ -9,8 +9,8 @@ namespace SeaBattleServer
     {
         static void Main(string[] args)
         {
-            Server server = new Server(25);
-            server.StartServer();
+            Server server = Server.Instance;
+            server.Start();
             Console.ReadLine();
         }
 

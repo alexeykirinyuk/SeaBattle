@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using SeaBattleLibrary;
+using System.Net.Sockets;
 
-namespace SeaBattleLibrary.src.Player
+namespace SeaBattleServer
 {
     public abstract class Bot : Player
     {
@@ -11,12 +13,7 @@ namespace SeaBattleLibrary.src.Player
 
         protected List<Address> hitAddress = new List<Address>();
         protected List<Address> deadAddress = new List<Address>();
-
-
-        public Bot() : base() {  }
-
-        public Bot(EndPoint ipServer) : base(ipServer) { }
-
+        
 
         #region generate map
         public void SetShips()
@@ -31,6 +28,15 @@ namespace SeaBattleLibrary.src.Player
                     while (!sw)
                     {
                         sw = GenerateShip(ship);
+                    }
+
+                    for(int i = 0; i < 10; i++)
+                    {
+                        for(int j = 0; j < 10; j++)
+                        {
+                            Console.Write((Map[i, j] == StatusField.Empty? "0" : "1") + " ");
+                        }
+                        Console.Write("\n");
                     }
 
                 }
@@ -104,22 +110,22 @@ namespace SeaBattleLibrary.src.Player
             int j = address.J;
             bool res = true;
             res &= Map[i, j] == StatusField.Empty;
-            if(j + 1 < 9) res &= Map[i, j + 1] == StatusField.Empty;
-            if(j - 1 > 0) res &= Map[i, j - 1] == StatusField.Empty;
-            if(i + 1 < 9) res &= Map[i + 1, j] == StatusField.Empty;
-            if(i - 1 > 0) res &= Map[i - 1, j] == StatusField.Empty;
+            if(j + 1 <= 9) res &= Map[i, j + 1] == StatusField.Empty;
+            if(j - 1 >= 0) res &= Map[i, j - 1] == StatusField.Empty;
+            if(i + 1 <= 9) res &= Map[i + 1, j] == StatusField.Empty;
+            if(i - 1 >= 0) res &= Map[i - 1, j] == StatusField.Empty;
 
-            if (i + 1 < 9 && j + 1 < 9) res &= Map[i + 1, j + 1] == StatusField.Empty;
-            if (i + 1 < 9 && j - 1 > 0) res &= Map[i + 1, j - 1] == StatusField.Empty;
-            if (i - 1 > 0 && j + 1 < 9) res &= Map[i - 1, j + 1] == StatusField.Empty;
-            if (i - 1 > 0 && j - 1 > 0) res &= Map[i - 1, j - 1] == StatusField.Empty;
+            if (i + 1 <= 9 && j + 1 <= 9) res &= Map[i + 1, j + 1] == StatusField.Empty;
+            if (i + 1 <= 9 && j - 1 >= 0) res &= Map[i + 1, j - 1] == StatusField.Empty;
+            if (i - 1 >= 0 && j + 1 <= 9) res &= Map[i - 1, j + 1] == StatusField.Empty;
+            if (i - 1 >= 0 && j - 1 >= 0) res &= Map[i - 1, j - 1] == StatusField.Empty;
             return res; 
         }
 
         private bool HasRight(Address address, int count)
         {
-            bool res = isNormalAddress(address);
-            if (!res) return res;
+            bool res = true;
+            if (!isNormalAddress(address)) return false;
             if (address.J + count - 1 > 9 || address.J + count - 1 < 0) return false;
             for(int j = address.J; j < address.J + count; j++)
             {

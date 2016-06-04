@@ -287,6 +287,7 @@
             this.labelLastAction = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonNewGame = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panelEnemy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox100)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox90)).BeginInit();
@@ -3633,6 +3634,16 @@
             this.buttonNewGame.UseVisualStyleBackColor = false;
             this.buttonNewGame.Click += new System.EventHandler(this.buttonNewGame_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1312, 619);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 21;
+            this.button1.Text = "Huck";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // BattleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3640,6 +3651,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1561, 664);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.labelLastAction);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonNewGame);
@@ -4171,6 +4183,7 @@
         private System.Windows.Forms.Label labelLastAction;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonNewGame;
+        private System.Windows.Forms.Button button1;
     }
 }
 

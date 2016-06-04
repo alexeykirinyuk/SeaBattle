@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using SeaBattleLibrary;
 
-namespace SeaBattleLibrary
+namespace SeaBattleServer
 {
     public class BattleMap
     {

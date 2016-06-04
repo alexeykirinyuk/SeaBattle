@@ -4,15 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace SeaBattleLibrary.src.Player
+namespace SeaBattleServer
 {
     public class SmartBot: Bot
     {
         private int indexShip = 0;
-
-        public SmartBot() : base() { }
-
-        public SmartBot(EndPoint ipServer) : base(ipServer) { }
 
         public override BotKillResult HitEnemy(Player enemy)
         {

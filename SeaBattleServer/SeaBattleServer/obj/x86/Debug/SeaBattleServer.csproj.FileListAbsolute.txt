@@ -19,3 +19,4 @@ C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Техно�
 C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.csprojResolveAssemblyReference.cache
 C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.Properties.Resources.resources
 C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\obj\x86\Debug\SeaBattleServer.csproj.GenerateResource.Cache
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleServer\SeaBattleServer\bin\Debug\SeaBattleLibrary.dll

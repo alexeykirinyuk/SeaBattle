@@ -7,23 +7,14 @@ namespace SeaBattleLibrary
     public class Ship: Param
     {
         [JsonProperty("AddressArray")]
-        private Address[] addressArray;
+        public Address[] AddressArray { get; private set; }
 
         [JsonIgnore]
         public int Length
         {
             get
             {
-                return addressArray.Length;
-            }
-        }
-
-        [JsonIgnore]
-        internal Address[] AddressArray
-        {
-            get
-            {
-                return addressArray;
+                return AddressArray.Length;
             }
         }
 
@@ -31,19 +22,19 @@ namespace SeaBattleLibrary
 
         public Ship(int length)
         {
-            addressArray = new Address[length];
+            AddressArray = new Address[length];
         }
 
         public Address this[int i]
         {
             get
             {
-                return addressArray[i];
+                return AddressArray[i];
             }
 
             set
             {
-                addressArray[i] = value;
+                AddressArray[i] = value;
             }
         }
 
@@ -53,7 +44,7 @@ namespace SeaBattleLibrary
             int[] x = new int[Length];
             int[] y = new int[Length];
             int i = 0;
-            foreach (Address address in addressArray)
+            foreach (Address address in AddressArray)
             {
                 x[i] = address.I;
                 y[i] = address.J;

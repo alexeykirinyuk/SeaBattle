@@ -5,24 +5,24 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using SeaBattleLibrary;
-using SeaBattleLibrary.src.Player;
+using System.Threading.Tasks;
 
 namespace SeaBattleClient
 {
     public class BattleCient
-    {  
-        private int port;
-        private string hostName;
-        private UdpClient udpClient;
-        private IPEndPoint remoteIpEndPoint;
+    {
+        private TcpClient tcpClient;
         private BattleForm form;
         public bool isStart { get; private set; }
 
-        public BattleCient(string hostName, int port, BattleForm form)
+        private List<Ship> ships;
+        private GameRegime regime;
+
+        public BattleCient(BattleForm form, List<Ship> ships, GameRegime regime)
         {
-            this.hostName = hostName;
-            this.port = port;
             this.form = form;
+            this.ships = ships;
+            this.regime = regime;
             StartClient();
         }
 
@@ -30,11 +30,11 @@ namespace SeaBattleClient
         {
             try
             {
-                udpClient = new UdpClient(hostName, port);
-                IPHostEntry remoteHostEntry = Dns.GetHostEntry(hostName);
-                remoteIpEndPoint = new IPEndPoint(remoteHostEntry.AddressList[0], port);
+                tcpClient = new TcpClient();
+                
+                tcpClient.Connect("127.0.0.1", 14000);
                 isStart = true;
-                Thread serverListenerThread = new Thread(new ThreadStart(FromServer));
+                Thread serverListenerThread = new Thread(FromServer);
                 serverListenerThread.IsBackground = true;
                 serverListenerThread.Start();
             }
@@ -50,32 +50,32 @@ namespace SeaBattleClient
             {
                 while (isStart)
                 {
-                    byte[] receive = udpClient.Receive(ref remoteIpEndPoint);
-                    string message = Encoding.Unicode.GetString(receive);
-                    CallMethod(Method.Deserialize(message));
+                    var method = tcpClient.ListenMethod();
+                    Task task = new Task(() => CallMethod(method));
+                    task.Start();
                 }
             }
             catch (Exception e)
             {
                 form.BattleDialog("Cannot listen server: " + e.Message);
+                isStart = false;
+                tcpClient.Close();
             }
         }
 
-        private void SendMethodOnServer(Method method)
+        ~BattleCient()
         {
-            string serializeMethod = method.Serialize();
-            byte[] methodByte = Encoding.Unicode.GetBytes(serializeMethod.ToCharArray());
-            udpClient.Send(methodByte, methodByte.Length);
+            tcpClient.Close();
         }
 
         #region server's methods
-        public void StartGame(List<Ship> ships, Game.Regime regime)
+        public void StartGame()
         {
             try
             {
                 if (!isStart) return;
                 Method method = new Method(Method.MethodName.StartGame, ParamConvert.Convert(ships), ParamConvert.Convert(regime));
-                SendMethodOnServer(method);
+                tcpClient.SendMethod(method);
             }
             catch (Exception e)
             {
@@ -86,40 +86,45 @@ namespace SeaBattleClient
         public void HitTheEnemy(Address address)
         {
             Method method = new Method(Method.MethodName.HitTheEnemy, ParamConvert.Convert(address));
-            SendMethodOnServer(method);
+            tcpClient.SendMethod(method);
         }
 
         public void ClientExit()
         {
-            Method method = new Method(Method.MethodName.Exit, null);
-            SendMethodOnServer(method);
-            udpClient.Close();
+            Method method = new Method(Method.MethodName.Exit);
+            tcpClient.SendMethod(method);
+            tcpClient.Close();
             isStart = false;
         }
         #endregion
 
         private void CallMethod(Method method)
         {
+            if (method == null) return;
+
             switch (method.Name)
             {
+                case Method.MethodName.GetStartGame:
+                    StartGame();
+                    break;
                 case Method.MethodName.SetTurn:
-                    ProcessTurn(ParamConvert.GetData<Player.Turn>(method[0]));
+                    ProcessTurn(ParamConvert.GetData<Turn>(method[0]));
                     break;
                 case Method.MethodName.Message:
                     form.BattleDialog(ParamConvert.GetData<string>(method[0]));
                     break;
                 case Method.MethodName.SetResultAfterYourHit:
                     form.BattleDialog(ParamConvert.GetData<string>(method[0]));
-                    ProcessTurn(ParamConvert.GetData<Player.Turn>(method[1]));
+                    ProcessTurn(ParamConvert.GetData<Turn>(method[1]));
                     form.SetEnemyMap(ParamConvert.GetData<StatusField[,]>(method[2]));
                     break;
                 case Method.MethodName.SetResultAfterEnemyHit:
                     form.BattleDialog(ParamConvert.GetData<string>(method[0]));
-                    ProcessTurn(ParamConvert.GetData<Player.Turn>(method[1]));
+                    ProcessTurn(ParamConvert.GetData<Turn>(method[1]));
                     form.SetMyMap(ParamConvert.GetData<StatusField[,]>(method[2]));
                     break;
                 case Method.MethodName.GameOver:
-                    ProcessStatusOver(ParamConvert.GetData<Player.Turn>(method[0]));
+                    ProcessStatusOver(ParamConvert.GetData<Turn>(method[0]));
                     break;
                 case Method.MethodName.YourEnemyExit:
                     form.LabelTurnText = "Выигрыш";
@@ -128,31 +133,31 @@ namespace SeaBattleClient
             }
         }
 
-        private void ProcessTurn(Player.Turn turn)
+        private void ProcessTurn(Turn turn)
         {
             switch (turn)
             {
-                case Player.Turn.YOUR:
+                case Turn.YOUR:
                     form.EnemyPanelEnamble = true;
                     form.LabelTurnText = "ты";
                     break;
-                case Player.Turn.ENEMY:
+                case Turn.ENEMY:
                     form.EnemyPanelEnamble = false;
                     form.LabelTurnText = "противник";
                     break;
             }
         }
 
-        private void ProcessStatusOver(Player.Turn turn)
+        private void ProcessStatusOver(Turn turn)
         {
             switch (turn)
             {
-                case Player.Turn.YOUR:
+                case Turn.YOUR:
                     form.EnemyPanelEnamble = false;
                     form.BattleDialog("Ты победил врага!");
                     form.LabelTurnText = "Выигрыш";
                     break;
-                case Player.Turn.ENEMY:
+                case Turn.ENEMY:
                     form.EnemyPanelEnamble = false;
                     form.BattleDialog("Ты проиграл!");
                     form.LabelTurnText = "Проигрыш";

@@ -12,7 +12,7 @@ namespace SeaBattleClient
 {
     public partial class RegimeDialog : Form
     {
-        public Game.Regime Result { get; private set; }
+        public GameRegime Result { get; private set; }
 
         public RegimeDialog()
         {
@@ -21,25 +21,25 @@ namespace SeaBattleClient
 
         private void buttonWithRealPerson_Click(object sender, EventArgs e)
         {
-            Result = Game.Regime.RealPerson;
+            Result = GameRegime.RealPerson;
             Close();
         }
 
         private void buttonBotLvl1_Click(object sender, EventArgs e)
         {
-            Result = Game.Regime.StupidBot;
+            Result = GameRegime.StupidBot;
             Close();
         }
 
         private void buttonBotLvl2_Click(object sender, EventArgs e)
         {
-            Result = Game.Regime.NormalBot;
+            Result = GameRegime.NormalBot;
             Close();
         }
 
         private void buttonBotLvl3_Click(object sender, EventArgs e)
         {
-            Result = Game.Regime.SmartBot;
+            Result = GameRegime.SmartBot;
             Close();
         }
     }

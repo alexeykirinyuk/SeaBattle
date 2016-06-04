@@ -5,3 +5,10 @@ C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLib
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\Newtonsoft.Json.dll
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\Newtonsoft.Json.xml
 C:\Users\alexe\Documents\educate\4sem\C#\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\obj\Debug\SeaBattleLibrary.csprojResolveAssemblyReference.cache
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\SeaBattleLibrary.dll
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\SeaBattleLibrary.pdb
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\Newtonsoft.Json.dll
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\bin\Debug\Newtonsoft.Json.xml
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\obj\Debug\SeaBattleLibrary.csprojResolveAssemblyReference.cache
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\obj\Debug\SeaBattleLibrary.dll
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleLibrary\SeaBattleLibrary\obj\Debug\SeaBattleLibrary.pdb

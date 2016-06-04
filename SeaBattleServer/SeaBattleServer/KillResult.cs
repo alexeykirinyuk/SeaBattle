@@ -1,4 +1,4 @@
-﻿namespace SeaBattleLibrary
+﻿namespace SeaBattleServer
 {
     public enum KillResult
     {

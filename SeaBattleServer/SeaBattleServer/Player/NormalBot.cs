@@ -2,14 +2,10 @@
 using System.Net;
 
 
-namespace SeaBattleLibrary.src.Player
+namespace SeaBattleServer
 {
     public class NormalBot: Bot
     {
-        public NormalBot() : base() { }
-
-        public NormalBot(EndPoint ipServer) : base(ipServer) { }
-
         public override BotKillResult HitEnemy(Player enemy)
         {
             BotKillResult result = new BotKillResult(KillResult.Error);

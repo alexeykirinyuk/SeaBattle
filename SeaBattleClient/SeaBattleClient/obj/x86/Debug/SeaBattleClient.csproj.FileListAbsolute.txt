@@ -25,3 +25,4 @@ C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Техно�
 C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.RegimeDialog.resources
 C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.StatisticForm.resources
 C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\obj\x86\Debug\SeaBattleClient.csproj.GenerateResource.Cache
+C:\Users\alexe\Google Диск\Education\2 курс\4 семестр\Технологии программирования\SeaBattle\SeaBattleClient\SeaBattleClient\bin\Debug\SeaBattleLibrary.dll
