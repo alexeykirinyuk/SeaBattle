@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net;
-
-
-namespace SeaBattleServer
+﻿namespace SeaBattleServer
 {
     public class NormalBot: Bot
     {
@@ -24,7 +20,5 @@ namespace SeaBattleServer
             }
             return result;
         }
-
-        
     }
 }

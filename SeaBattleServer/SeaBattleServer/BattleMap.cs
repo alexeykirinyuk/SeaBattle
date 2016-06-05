@@ -6,54 +6,56 @@ namespace SeaBattleServer
 {
     public class BattleMap
     {
-        private StatusField[,] statusMap = new StatusField[N, N];
-        private List<Ship> ships = new List<Ship>();
         private const int N = 10;
 
+        public StatusField[,] StatusMap { get; private set; }
+
+        private List<Ship> _ships;
+
+        #region Indexers
         public StatusField this[Address address]
         {
             get
             {
-                return statusMap[address.I, address.J];    
+                return StatusMap[address.I, address.J];    
             }
             private set
             {
-                statusMap[address.I, address.J] = value;
+                StatusMap[address.I, address.J] = value;
             }
         }
+
         public StatusField this[int i, int j]
         {
             get
             {
-                return statusMap[i, j];
+                return StatusMap[i, j];
             }
             private set
             {
-                statusMap[i, j] = value;
+                StatusMap[i, j] = value;
             }
         }
+
         public Ship this[int indexShip]
         {
             get
             {
-                return ships[indexShip];
+                return _ships[indexShip];
             }
         }
-        public StatusField[,] StatusMap
-        {
-            get
-            {
-                return statusMap;
-            }
-        }
+        #endregion
 
         public BattleMap()
         {
+            StatusMap = new StatusField[N, N];
+            _ships = new List<Ship>();
+
             for (int x = 0; x < N; x++)
             {
                 for (int y = 0; y < N; y++)
                 {
-                    statusMap[x, y] = StatusField.Empty;
+                    StatusMap[x, y] = StatusField.Empty;
                 }
             }
         }
@@ -68,7 +70,7 @@ namespace SeaBattleServer
                 ship[i] = address;
                 i++;
             }
-            ships.Add(ship);
+            _ships.Add(ship);
         }
 
         public void AddShip(Ship ship)
@@ -79,6 +81,7 @@ namespace SeaBattleServer
         public KillResult Kill(Address address)
         {
             KillResult killed = KillResult.Error;
+
             switch (this[address])
             {
                 case StatusField.Empty:
@@ -104,6 +107,7 @@ namespace SeaBattleServer
         public StatusField[,] GetStatusFieldsForEnemy()
         {
             StatusField[,] mapForEnemy = new StatusField[N, N];
+
             for (int x = 0; x < N; x++)
             {
                 for (int y = 0; y < N; y++)
@@ -123,7 +127,7 @@ namespace SeaBattleServer
 
         public bool HasShip()
         {
-            return ships.Count > 0;
+            return _ships.Count > 0;
         }
 
         private void SetDeadShip(Address address)
@@ -134,7 +138,7 @@ namespace SeaBattleServer
             {
                 this[ship[i]] = StatusField.DeadShip;
             }
-            ships.Remove(ship);
+            _ships.Remove(ship);
         }
 
         private bool IsDeadShip(Address address)
@@ -152,7 +156,8 @@ namespace SeaBattleServer
         private Ship GetShipFromAddressField(Address address)
         {
             Ship resultShip = new Ship(0);
-            foreach (Ship ship in ships)
+
+            foreach (Ship ship in _ships)
             {
                 bool has = false;
                 for (int i = 0; i < ship.Length; i++)
@@ -171,14 +176,16 @@ namespace SeaBattleServer
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder("");
+
             for(int i = 0; i < N; i++)
             {
                 for (int j = 0; j < N; j++)
                 {
-                    sb.Append(statusMap[i, j]).Append(" ");
+                    sb.Append(StatusMap[i, j]).Append(" ");
                 }
                 sb.Append('\n');
             }
+
             return sb.ToString();
         }
 

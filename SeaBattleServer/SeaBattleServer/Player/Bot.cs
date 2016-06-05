@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using SeaBattleLibrary;
-using System.Net.Sockets;
 
 namespace SeaBattleServer
 {
     public abstract class Bot : Player
     {
-        protected Random random = new Random();
-        protected int[] abilityAddShip = { 4, 3, 2, 1 };
+        protected static readonly Random random = new Random();
+        protected int[] _abilityAddShip = { 4, 3, 2, 1 };
 
         protected List<Address> hitAddress = new List<Address>();
         protected List<Address> deadAddress = new List<Address>();
@@ -18,9 +16,9 @@ namespace SeaBattleServer
         #region generate map
         public void SetShips()
         {
-            for (int countFields = 0; countFields < abilityAddShip.Length; countFields++)
+            for (int countFields = 0; countFields < _abilityAddShip.Length; countFields++)
             {
-                for (int countShips = 0; countShips < abilityAddShip[countFields]; countShips++)
+                for (int countShips = 0; countShips < _abilityAddShip[countFields]; countShips++)
                 {
                     Ship ship = new Ship(countFields + 1);
                     bool sw = false;
@@ -204,34 +202,34 @@ namespace SeaBattleServer
 
             if (left)
             {
-                botKillResult.result = enemy.Map.Kill(addressLeft);
-                if (botKillResult.result == KillResult.KillPartShip) hitAddress.Add(addressLeft);
-                else if (botKillResult.result == KillResult.KillShip) hitAddress.Clear();
-                botKillResult.address = addressLeft;
+                botKillResult.Result = enemy.Map.Kill(addressLeft);
+                if (botKillResult.Result == KillResult.KillPartShip) hitAddress.Add(addressLeft);
+                else if (botKillResult.Result == KillResult.KillShip) hitAddress.Clear();
+                botKillResult.Address = addressLeft;
                 deadAddress.Add(addressLeft);
             }
             else if (right)
             {
-                botKillResult.result = enemy.Map.Kill(addressRight);
-                if (botKillResult.result == KillResult.KillPartShip) hitAddress.Add(addressRight);
-                else if (botKillResult.result == KillResult.KillShip) hitAddress.Clear();
-                botKillResult.address = addressRight;
+                botKillResult.Result = enemy.Map.Kill(addressRight);
+                if (botKillResult.Result == KillResult.KillPartShip) hitAddress.Add(addressRight);
+                else if (botKillResult.Result == KillResult.KillShip) hitAddress.Clear();
+                botKillResult.Address = addressRight;
                 deadAddress.Add(addressRight);
             }
             else if (top)
             {
-                botKillResult.result = enemy.Map.Kill(addressTop);
-                if (botKillResult.result == KillResult.KillPartShip) hitAddress.Add(addressTop);
-                else if (botKillResult.result == KillResult.KillShip) hitAddress.Clear();
-                botKillResult.address = addressTop;
+                botKillResult.Result = enemy.Map.Kill(addressTop);
+                if (botKillResult.Result == KillResult.KillPartShip) hitAddress.Add(addressTop);
+                else if (botKillResult.Result == KillResult.KillShip) hitAddress.Clear();
+                botKillResult.Address = addressTop;
                 deadAddress.Add(addressTop);
             }
             else if (down)
             {
-                botKillResult.result = enemy.Map.Kill(addressDown);
-                if (botKillResult.result == KillResult.KillPartShip) hitAddress.Add(addressDown);
-                else if (botKillResult.result == KillResult.KillShip) hitAddress.Clear();
-                botKillResult.address = addressDown;
+                botKillResult.Result = enemy.Map.Kill(addressDown);
+                if (botKillResult.Result == KillResult.KillPartShip) hitAddress.Add(addressDown);
+                else if (botKillResult.Result == KillResult.KillShip) hitAddress.Clear();
+                botKillResult.Address = addressDown;
                 deadAddress.Add(addressDown);
             }
             else
@@ -255,11 +253,11 @@ namespace SeaBattleServer
                 return HitAround(enemy, address);
             }
 
-            killed.result = enemy.Map.Kill(address);
-            if (killed.result == KillResult.KillPartShip) hitAddress.Add(address);
-            else if (killed.result == KillResult.KillShip) hitAddress.Clear();
+            killed.Result = enemy.Map.Kill(address);
+            if (killed.Result == KillResult.KillPartShip) hitAddress.Add(address);
+            else if (killed.Result == KillResult.KillShip) hitAddress.Clear();
             deadAddress.Add(address);
-            killed.address = address;
+            killed.Address = address;
             return killed;
         }
 
@@ -303,18 +301,18 @@ namespace SeaBattleServer
 
                 if (MaxNormalAddress && !deadAddress.Contains(addressMax))
                 {
-                    killed.result = enemy.Map.Kill(addressMax);
-                    if (killed.result == KillResult.KillPartShip) hitAddress.Add(addressMax);
-                    else if (killed.result == KillResult.KillShip) hitAddress.Clear();
-                    killed.address = addressMax;
+                    killed.Result = enemy.Map.Kill(addressMax);
+                    if (killed.Result == KillResult.KillPartShip) hitAddress.Add(addressMax);
+                    else if (killed.Result == KillResult.KillShip) hitAddress.Clear();
+                    killed.Address = addressMax;
                     deadAddress.Add(addressMax);
                 }
                 else if(MinNormalAddress && !deadAddress.Contains(addressMin))
                 {
-                    killed.result = enemy.Map.Kill(addressMin);
-                    if (killed.result == KillResult.KillPartShip) hitAddress.Add(addressMin);
-                    else if (killed.result == KillResult.KillShip) hitAddress.Clear();
-                    killed.address = addressMin;
+                    killed.Result = enemy.Map.Kill(addressMin);
+                    if (killed.Result == KillResult.KillPartShip) hitAddress.Add(addressMin);
+                    else if (killed.Result == KillResult.KillShip) hitAddress.Clear();
+                    killed.Address = addressMin;
                     deadAddress.Add(addressMin);
                 }
             }
@@ -335,19 +333,19 @@ namespace SeaBattleServer
 
                 if (MaxNormalAddress && !deadAddress.Contains(addressMax))
                 {
-                    killed.result = enemy.Map.Kill(addressMax);
-                    if (killed.result == KillResult.KillPartShip) hitAddress.Add(addressMax);
-                    else if (killed.result == KillResult.KillShip) hitAddress.Clear();
+                    killed.Result = enemy.Map.Kill(addressMax);
+                    if (killed.Result == KillResult.KillPartShip) hitAddress.Add(addressMax);
+                    else if (killed.Result == KillResult.KillShip) hitAddress.Clear();
                     deadAddress.Add(addressMax);
-                    killed.address = addressMax;
+                    killed.Address = addressMax;
                 }
                 else if (MinNormalAddress && !deadAddress.Contains(addressMin))
                 {
-                    killed.result = enemy.Map.Kill(addressMin);
-                    if (killed.result == KillResult.KillPartShip) hitAddress.Add(addressMin);
-                    else if (killed.result == KillResult.KillShip) hitAddress.Clear();
+                    killed.Result = enemy.Map.Kill(addressMin);
+                    if (killed.Result == KillResult.KillPartShip) hitAddress.Add(addressMin);
+                    else if (killed.Result == KillResult.KillShip) hitAddress.Clear();
                     deadAddress.Add(addressMin);
-                    killed.address = addressMin;
+                    killed.Address = addressMin;
                 }
                 else { return killed; }
             }
@@ -362,19 +360,20 @@ namespace SeaBattleServer
 
         public struct BotKillResult
         {
-            public Address address;
-            public KillResult result;
+            public Address Address { get; set; }
+
+            public KillResult Result { get; set; }
 
             public BotKillResult(Address address, KillResult result)
             {
-                this.address = address;
-                this.result = result;
+                this.Address = address;
+                this.Result = result;
             }
 
             public BotKillResult(KillResult result)
             {
-                address = null;
-                this.result = result;
+                Address = null;
+                this.Result = result;
             }
         }
 

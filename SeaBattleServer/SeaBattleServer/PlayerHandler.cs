@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace SeaBattleServer
             threadListen.IsBackground = true;
             threadListen.Start();
             isListen = true;
-            TcpClient.SendMethod(new Method(Method.MethodName.GetStartGame));
+            SendMethod(new Method(Method.MethodName.GetStartGame));
         }
 
         private void Listen()
@@ -37,7 +38,7 @@ namespace SeaBattleServer
             }
             catch(Exception)
             {
-                Console.WriteLine(Player.ID + " отключился");
+                Console.WriteLine(Player.Nickname + " отключился");
                 isListen = false;
                 TcpClient.Close();
             }
@@ -75,6 +76,8 @@ namespace SeaBattleServer
                 player.Map.AddShip(ship);
             }
 
+            Server.Instance.PlayerHadlerList.Add(this);
+
             if (regime != GameRegime.RealPerson)
             {
                 Bot bot = null;
@@ -92,15 +95,20 @@ namespace SeaBattleServer
                 }
 
                 bot.SetShips();
-                StartGameWithBot(new BotHandler() { Player = bot }, regime);
+                var botHandler = new BotHandler() { Player = bot };
+                Server.Instance.PlayerHadlerList.Add(botHandler);
+
+                StartGameWithBot(botHandler, regime);
                 return;
             }
 
-            if (Server.Instance.PlayerHadlerList.Count % 2 == 0)
+            var count = Server.Instance.PlayerHadlerList.Count;
+            if (count % 2 == 0 && count != 0)
             {
                 lock (block)
                 {
-                    if (Server.Instance.PlayerHadlerList.Count % 2 == 0)
+                    var countAfterLock = Server.Instance.PlayerHadlerList.Count;
+                    if (countAfterLock % 2 == 0 && countAfterLock != 0)
                     {
                         StartGame();
                     }
@@ -111,8 +119,8 @@ namespace SeaBattleServer
         private void PlayerExit()
         {
             var enemyHandler = GetEnemyHandler();
-            TcpClient.SendMethod(new Method(Method.MethodName.GameOver, ParamConvert.Convert("Ваш враг вышел из игры.")));
-            Console.WriteLine(Player.ID + " вышел из игры.");
+            SendMethod(new Method(Method.MethodName.GameOver, ParamConvert.Convert("Ваш враг вышел из игры.")));
+            Console.WriteLine(Player.Nickname + " вышел из игры.");
             Server.Instance.Games.Remove(Game);
             Server.Instance.PlayerHadlerList.Remove(this);
             Server.Instance.PlayerHadlerList.Remove(enemyHandler);
@@ -122,35 +130,36 @@ namespace SeaBattleServer
         {
             if (Player.WhoseTurn != Turn.YOUR)
             {
-                TcpClient.SendMethod(new Method(Method.MethodName.Message, ParamConvert.Convert("Сейчас не ваш ход")));
+                SendMethod(new Method(
+                    Method.MethodName.Message, 
+                    ParamConvert.Convert("Сейчас не ваш ход"))
+                    );
                 return;
             }
 
             Handler enemyHandler = GetEnemyHandler();
-
             KillResult killResult = enemyHandler.Player.Map.Kill(address);
-            
-            ReverseTurn(killResult);
+            Game.ReverseTurn(killResult);
 
-            Method methodForYour = GenerateMethodForYour(enemyHandler.Player, killResult, address);
-            TcpClient.SendMethod(methodForYour);
+            Method methodForYour = GenerateMethodAfterHitForMe(enemyHandler.Player, killResult, address);
+            SendMethod(methodForYour);
 
             if (Game.Regm == GameRegime.RealPerson)
             {
-                Method methodForEnemy = GenerateMethodForYour(enemyHandler.Player, killResult, address);
+                Method methodForEnemy = GenerateMethodAfterHitForEnemy(enemyHandler.Player, killResult, address);
                 if (methodForEnemy != null)
-                    (GetEnemyHandler() as PlayerHandler).TcpClient.SendMethod(methodForEnemy);
+                    (GetEnemyHandler() as PlayerHandler).SendMethod(methodForEnemy);
             }
             else
             {
                 if (enemyHandler.Player.WhoseTurn == Turn.YOUR)
                 {
-                    BotHit();
+                    (GetEnemyHandler() as BotHandler).HitPlayer();
                 }
             }
 
             if (!enemyHandler.Player.Map.HasShip())
-                GameOver(this, enemyHandler);
+                GameOver(this, enemyHandler, Game);
         }
 
         private void StartGameWithBot(BotHandler botHandler, GameRegime regime)
@@ -161,7 +170,7 @@ namespace SeaBattleServer
             Server.Instance.Games.Add(Game);
             Game.SetWhoseTurn(true);
 
-            Console.WriteLine("Start Game. Player: " + Game.Handler1.Player.ID + "; Bot :" + Game.Handler2.Player.ID);
+            Console.WriteLine("Start Game. Player: " + Game.Handler1.Player.Nickname + "; Bot :" + Game.Handler2.Player.Nickname);
 
             SendTurnToClients(Game.Handler1 as PlayerHandler);
         }
@@ -177,118 +186,37 @@ namespace SeaBattleServer
             Server.Instance.Games.Add(nGame);
             nGame.SetWhoseTurn(true);
 
-            Console.WriteLine("Start Game. Player1: " + nGame.Handler1.Player.ID + "; Player2 :" + nGame.Handler2.Player.ID);
+            Console.WriteLine("Start Game. Player1: " + nGame.Handler1.Player.Nickname + "; Player2 :" + nGame.Handler2.Player.Nickname);
             
             SendTurnToClients(nGame.Handler1 as PlayerHandler, nGame.Handler2 as PlayerHandler);
         }
 
-        private Handler GetEnemyHandler()
+        public void SendMethod(Method method)
         {
-            return Game.Handler1 == this ? Game.Handler2 : Game.Handler1;
-        }
-        
-        private void ReverseTurn(KillResult killResult)
-        {
-            if (killResult == KillResult.KillEmpty) Game.ReverseTurn();
-        }
-
-        private Method GenerateMethodForYour(Player enemy, KillResult killResult, Address address)
-        {
-            Method methodForYour = new Method(Method.MethodName.SetResultAfterYourHit, 3);
-            switch (killResult)
+            try
             {
-                case KillResult.Error:
-                    methodForYour[0] = ParamConvert.Convert("Попробуй ещё раз. (" + address.ToString() + ")");
-                    methodForYour[1] = ParamConvert.Convert(Player.WhoseTurn);
-                    methodForYour[2] = ParamConvert.Convert(enemy.Map.GetStatusFieldsForEnemy());
-                    TcpClient.SendMethod(methodForYour);
-                    return methodForYour;
-                case KillResult.KillShip:
-                    methodForYour[0] = ParamConvert.Convert("Ты уничтожил корабль врага! (" + address.ToString() + ")");
-                    break;
-                case KillResult.KillPartShip:
-                    methodForYour[0] = ParamConvert.Convert("Ты повредил корабль врага! (" + address.ToString() + ")");
-                    break;
-                case KillResult.KillEmpty:
-                    methodForYour[0] = ParamConvert.Convert("Ты промазал! (" + address.ToString() + ")");
-                    break;
+                var stream = TcpClient.GetStream();
+                var strMethod = method.Serialize();
+                var byteMethod = Encoding.UTF8.GetBytes(strMethod);
+
+                Console.WriteLine(method + " TO " + Player.Nickname);
+                stream.Write(byteMethod, 0, byteMethod.Length);
             }
-            methodForYour[1] = ParamConvert.Convert(Player.WhoseTurn);
-            methodForYour[2] = ParamConvert.Convert(enemy.Map.StatusMap);
-            Console.WriteLine("Ход{" + Player.ID + ":" + Player.WhoseTurn);
-            return methodForYour;
-        }
-
-        private Method GenerateMethodForEnemy(Player player, KillResult killResult, Address address)
-        {
-            Method methodForEnemy = new Method(Method.MethodName.SetResultAfterEnemyHit, 3);
-            switch (killResult)
+            catch (Exception)
             {
-                case KillResult.Error:
-                    return null;
-                case KillResult.KillShip:
-                    methodForEnemy[0] = ParamConvert.Convert("Враг уничтожил твой корабль! (" + address.ToString() + ")");
-                    break;
-                case KillResult.KillPartShip:
-                    methodForEnemy[0] = ParamConvert.Convert("Враг повредил твой корабль! (" + address.ToString() + ")");
-                    break;
-                case KillResult.KillEmpty:
-                    methodForEnemy[0] = ParamConvert.Convert("Противник промазал! (" + address.ToString() + ")");
-                    break;
-            }
-            methodForEnemy[1] = ParamConvert.Convert(player.WhoseTurn);
-            methodForEnemy[2] = ParamConvert.Convert(player.Map.StatusMap);
-            return methodForEnemy;
-        }
-
-        private void BotHit()
-        {
-            var botHandler = GetEnemyHandler() as BotHandler;
-
-
-            while (botHandler.Player.WhoseTurn == Turn.YOUR)
-            {
-                var bot = botHandler.Player as Bot;
-                if (bot == null) return;
-
-                var killed = bot.HitEnemy(Player);
-                if (killed.result == KillResult.Error)
-                {
-                    continue;                   //govnishe
-                }
-                ReverseTurn(killed.result);
-                Method methodForPlayer = GenerateMethodForEnemy(Player, killed.result, killed.address);
-                TcpClient.SendMethod(methodForPlayer);
-
-                Thread.Sleep(1000);
-
-                if (!Player.Map.HasShip())
-                {
-                    GameOver(botHandler, this);
-                    return;
-                }
+                Console.WriteLine("Ошибка при отправке сообщения");
             }
         }
 
-        private void GameOver(Handler win, Handler loser)
+        public Method ListenMethod()
         {
-            TcpClient.SendMethod(new Method(Method.MethodName.GameOver, ParamConvert.Convert(this == win ? Turn.YOUR : Turn.ENEMY)));
-            if (!(Game.Regm != GameRegime.RealPerson))
-                (GetEnemyHandler() as PlayerHandler).TcpClient.SendMethod(new Method(Method.MethodName.GameOver, ParamConvert.Convert(GetEnemyHandler() == win ? Turn.YOUR : Turn.ENEMY)));
-            Console.WriteLine("Игра закончена!! Win: " + win.Player.ID);
-            Server.Instance.Games.Remove(Game);
-            Server.Instance.PlayerHadlerList.Remove(win);
-            Server.Instance.PlayerHadlerList.Remove(loser);
-        }
+            var byteMethod = new byte[TcpClient.ReceiveBufferSize];
+            TcpClient.GetStream().Read(byteMethod, 0, byteMethod.Length);
+            var strMethod = Encoding.UTF8.GetString(byteMethod);
+            var method = Method.Deserialize(strMethod);
 
-        private void SendTurnToClients(params PlayerHandler[] handlers)
-        {
-            foreach (var handler in handlers)
-            {
-                if (handler == null) break;
-                Method setTurnMethod = new Method(Method.MethodName.SetTurn, ParamConvert.Convert(handler.Player.WhoseTurn));
-                TcpClient.SendMethod(setTurnMethod);
-            }
+            Console.WriteLine(method + " FROM " + Player.Nickname);
+            return method;
         }
     }
 }

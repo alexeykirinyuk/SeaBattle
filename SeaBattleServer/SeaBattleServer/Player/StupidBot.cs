@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace SeaBattleServer
+﻿namespace SeaBattleServer
 {
     public class StupidBot : Bot
     {

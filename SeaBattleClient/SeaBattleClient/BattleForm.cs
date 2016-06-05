@@ -9,23 +9,30 @@ namespace SeaBattleClient
 {
     public partial class BattleForm : Form
     {
-        private delegate void ActionToPicBox(PictureBox box);
-        private delegate void Del();
-
         private const int N = 10;
 
-        private int[] abilityAddShip = { 4, 3, 2, 1 };
-        private int abilityAddField = 0;
+        private int[] _abilityAddShip;
+        private int _abilityAddField;
 
-        private List<Ship> shipsBuf = new List<Ship>();
-        private List<Address> addressBuf = new List<Address>();
+        private List<Ship> _shipsBuf;
+        private List<Address> _addressBuf;
 
-        private BattleCient client;
-        private StatisticForm statisticForm = new StatisticForm();
+        private BattleCient _client;
+
+        private StatisticForm _statisticForm;
+
+        private delegate void ActionToPicBox(PictureBox box);
+        private delegate void Del();
 
         public BattleForm()
         {
             InitializeComponent();
+            _abilityAddShip = new int[] { 4, 3, 2, 1 };
+            _abilityAddField = 0;
+            _shipsBuf = new List<Ship>();
+            _addressBuf = new List<Address>();
+            _statisticForm = new StatisticForm();
+
         }
 
         public string LabelTurnText
@@ -57,7 +64,7 @@ namespace SeaBattleClient
                     countLineInBattleDialog = 0;
                 }
                 }));
-            statisticForm.AddList(message);
+            _statisticForm.AddList(message);
            
         }
 
@@ -79,19 +86,19 @@ namespace SeaBattleClient
             panelMy.Invoke(new Del(() => panelMy.Enabled = false));
             panelEnemy.Invoke(new Del(() => panelEnemy.Enabled = false));
 
-            abilityAddShip[0] = 4;
-            abilityAddShip[1] = 3;
-            abilityAddShip[2] = 2;
-            abilityAddShip[3] = 1;
-            abilityAddField = 0;
+            _abilityAddShip[0] = 4;
+            _abilityAddShip[1] = 3;
+            _abilityAddShip[2] = 2;
+            _abilityAddShip[3] = 1;
+            _abilityAddField = 0;
 
             buttonStartGame.Invoke(new Del(() => buttonStartGame.Enabled = false));
             buttonCancelShip.Invoke(new Del(() => buttonCancelShip.Enabled = true));
             labelLastAction.Invoke(new Del(() => labelLastAction.Text = ""));
             labelTurn.Invoke(new Del(() => labelTurn.Text = ""));
 
-            shipsBuf.Clear();
-            addressBuf.Clear();
+            _shipsBuf.Clear();
+            _addressBuf.Clear();
 
             SwichOnAllButtonsAdd();
         }
@@ -112,29 +119,29 @@ namespace SeaBattleClient
             int idButton = int.Parse(tagButton);
             SwichOffAllButtonsAdd();
             panelMy.Enabled = true;
-            abilityAddField = idButton + 1;
+            _abilityAddField = idButton + 1;
         }
 
         private void onMyField_Click(object sender, EventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
             Address address = GetAddressPicture(pictureBox);
-            if (!address.CanPutShip(shipsBuf))
+            if (!address.CanPutShip(_shipsBuf))
             {
                 MessageBox.Show("Пожалуйста, поставьте корабль в правильное место (читать правила игры)");
                 CancelAddressBuffer();
                 return;
             }
             pictureBox.Image = GetImage(StatusField.Ship);
-            abilityAddField--;
+            _abilityAddField--;
 
-            addressBuf.Add(address);
+            _addressBuf.Add(address);
 
-            if (abilityAddField == 0)
+            if (_abilityAddField == 0)
             {
-                Ship ship = new Ship(addressBuf.Count);
+                Ship ship = new Ship(_addressBuf.Count);
                 int i = 0;
-                foreach (Address addr in addressBuf)
+                foreach (Address addr in _addressBuf)
                 {
                     ship[i] = addr;
                     i++;
@@ -142,15 +149,15 @@ namespace SeaBattleClient
 
                 if (!ship.isNormalShip())
                 {
-                    MessageBox.Show("Please put the ship in the right way. (See Rules of the Game)");
+                    MessageBox.Show("Пожалуйста, расставляйте корабли правильно (по прямой линии)");
                     CancelAddressBuffer();
                 }
                 else
                 {
-                    shipsBuf.Add(ship);
-                    abilityAddShip[addressBuf.Count - 1]--;
+                    _shipsBuf.Add(ship);
+                    _abilityAddShip[_addressBuf.Count - 1]--;
                 }
-                addressBuf.Clear();
+                _addressBuf.Clear();
                 panelMy.Enabled = false;
                 SwichOnAllButtonsAdd();
                 if (IsPlacingOnShips)
@@ -162,10 +169,10 @@ namespace SeaBattleClient
 
         private void OnEnemyField_Click(object sender, EventArgs e)
         {
-            if (!client.isStart) return;
+            if (!_client.IsStart) return;
             PictureBox pictureBox = (PictureBox)sender;
             Address address = GetAddressPicture(pictureBox);
-            client.HitTheEnemy(address);
+            _client.HitTheEnemy(address);
         }
 
         private void startGame_Click(object sender, EventArgs e)
@@ -175,32 +182,32 @@ namespace SeaBattleClient
             RegimeDialog dialog = new RegimeDialog();
             dialog.ShowDialog();
 
-            client = new BattleCient(this, shipsBuf, dialog.Result);
+            _client = new BattleCient(this, _shipsBuf, dialog.Result);
             buttonStartGame.Enabled = false;
         }
 
         private void BattleForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (client != null)
-                if (client.isStart)
-                    client.ClientExit();
+            if (_client != null)
+                if (_client.IsStart)
+                    _client.ClientExit();
         }
 
         private void buttonCancelShip_Click(object sender, EventArgs e)
         {
-            if (client != null) if (client.isStart) return;
+            if (_client != null) if (_client.IsStart) return;
             Reboot();
         }
 
         private void getStatisticForm_Click(object sender, EventArgs e)
         {
-            statisticForm.ShowDialog();
+            _statisticForm.ShowDialog();
         }
 
         private void buttonNewGame_Click(object sender, EventArgs e)
         {
             Reboot();
-            client.ClientExit();
+            _client.ClientExit();
         }
         #endregion
 
@@ -231,7 +238,7 @@ namespace SeaBattleClient
             get
             {
                 bool all = true;
-                foreach (int i in abilityAddShip)
+                foreach (int i in _abilityAddShip)
                 {
                     all &= i == 0;
                 }
@@ -244,7 +251,7 @@ namespace SeaBattleClient
             ForAllFields(panelMy, (pic) =>
             {
                 Address address = GetAddressPicture(pic);
-                foreach (Address adr in addressBuf)
+                foreach (Address adr in _addressBuf)
                 {
                     if (address.Equals(adr))
                     {
@@ -317,17 +324,10 @@ namespace SeaBattleClient
 
         private void SwichOnAllButtonsAdd()
         {
-            for (int i = 0; i < abilityAddShip.Length; i++)
+            for (int i = 0; i < _abilityAddShip.Length; i++)
             {
-                if (abilityAddShip[i] > 0) GetButtonAddShip(i + 1).Enabled = true;
+                if (_abilityAddShip[i] > 0) GetButtonAddShip(i + 1).Enabled = true;
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            buttonStartGame.Enabled = true;
-        }
     }
-    
-    
 }

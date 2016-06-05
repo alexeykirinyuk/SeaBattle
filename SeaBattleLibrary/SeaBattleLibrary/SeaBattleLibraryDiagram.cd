@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="Классы и перечисления, передаваемые между клиентом и сервером">
+    <Position X="6.75" Y="1.25" Height="0.524" Width="3.89" />
+  </Comment>
+  <Comment CommentText="Статический класс для конвертации и деконвертации объекта в Param">
+    <Position X="3.25" Y="1.75" Height="0.433" Width="2.46" />
+  </Comment>
+  <Comment CommentText="Класс для удобной передачи сообщений между клиентом и сервером">
+    <Position X="0.5" Y="0.5" Height="0.598" Width="2.182" />
+  </Comment>
+  <Class Name="SeaBattleLibrary.Method">
+    <Position X="0.5" Y="1.25" Width="2.25" />
+    <Members>
+      <Property Name="Length" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="SeaBattleLibrary.Method.MethodName" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Method.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="SeaBattleLibrary.Method.IncorrectParamsException" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Method.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAECAAAAARAACBCAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Method.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_paramts" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="SeaBattleLibrary.ParamConvert">
+    <Position X="3.25" Y="2.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="SeaBattleLibrary.ParamConvert.ParamData&lt;T&gt;">
+        <TypeIdentifier>
+          <NewMemberFileName>ParamConvert.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamConvert.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleLibrary.Address" BaseTypeListCollapsed="true">
+    <Position X="6.75" Y="2" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgABEAAAAAAAgAIAAAAAAACABAAA=</HashCode>
+      <FileName>Address.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SeaBattleLibrary.Ship">
+    <Position X="8.75" Y="2" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAACAABAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Ship.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="SeaBattleLibrary.Param" Collapsed="true">
+    <Position X="4.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParamConvert.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="GameRegime">
+    <Position X="6.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAECAAAAQAAAAIAAAAAAAA=</HashCode>
+      <FileName>GameRegime.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Turn">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Turn.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

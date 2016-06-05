@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="BattleMap.cs" />
     <Compile Include="BotHandler.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Handler.cs" />
     <Compile Include="KillResult.cs" />
@@ -69,9 +70,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="Класс - одиночка. Основные действия: ожидание на подключение новый пользователей">
+    <Position X="0.5" Y="0.5" Height="0.75" Width="2.492" />
+  </Comment>
+  <Comment CommentText="Класс игры, хранящий объекты двух Heandler'ов. ">
+    <Position X="4.497" Y="0.719" Height="0.531" Width="2.73" />
+  </Comment>
+  <Comment CommentText="Класс, реализующий всю серверную логику игры.">
+    <Position X="3.031" Y="3.969" Height="0.562" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Класс, реализующий всю серверную логику игры бота.">
+    <Position X="1.479" Y="6.688" Height="0.74" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Класс, реализующий всю серверную логику игры бота.">
+    <Position X="4.99" Y="6.76" Height="0.74" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Абстрактный класс, реализующий логику игры бота. Основные действия: сгенерировать карту, сделать ход.">
+    <Position X="8.312" Y="4.115" Height="0.802" Width="2.419" />
+  </Comment>
+  <Comment CommentText="Классы, реализующие удары бота.">
+    <Position X="6.194" Y="10.764" Height="0.514" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Перечисление режимов игры">
+    <Position X="7.781" Y="1.156" Height="0.323" Width="2.065" />
+  </Comment>
+  <Comment CommentText="Класс игрока">
+    <Position X="10.281" Y="0.875" Height="0.323" Width="1.971" />
+  </Comment>
+  <Comment CommentText="Класс карты. Хранит матрицу статусов поля (10 на 10) и список кораблей, находящихся на карте. Основные действия: удар по полю, добавление корабля, возращение карты для противника.">
+    <Position X="13" Y="1.865" Height="1.115" Width="2.981" />
+  </Comment>
+  <Comment CommentText="Перечисление результата удара по полю">
+    <Position X="13.688" Y="6.677" Height="0.542" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Перечисление статусов полей на карте.">
+    <Position X="17.76" Y="4.865" Height="0.594" Width="1.46" />
+  </Comment>
+  <Comment CommentText="Класс корабля">
+    <Position X="17.927" Y="2.396" Height="0.302" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Класс адреса на карте">
+    <Position X="21.833" Y="2.365" Height="0.323" Width="2.315" />
+  </Comment>
+  <Class Name="SeaBattleServer.Game">
+    <Position X="4.5" Y="1.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAEAAAAAAAQAgAAAAAAAAAEA=</HashCode>
+      <FileName>Game.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Handler1" />
+      <Property Name="Handler2" />
+      <Property Name="Regm" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SeaBattleServer.Handler">
+    <Position X="4.75" Y="3.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAgAAAAAAAAAACAAAAAACgAAAAAAAAAASAAAAA=</HashCode>
+      <FileName>Handler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Game" />
+      <Property Name="Player" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SeaBattleServer.BotHandler">
+    <Position X="3.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>BotHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleServer.PlayerHandler">
+    <Position X="6.75" Y="5.75" Width="2" />
+    <Members>
+      <Method Name="~PlayerHandler" Hidden="true" />
+      <Field Name="block" Hidden="true" />
+      <Method Name="Listen" Hidden="true" />
+      <Field Name="threadListen" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAMCAIAMEAAAAACAAwAAAAAAAAAAAAAAAABIA=</HashCode>
+      <FileName>PlayerHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleServer.Player">
+    <Position X="10.25" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAQBAAAABAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Player\Player.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Map" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SeaBattleServer.BattleMap">
+    <Position X="13" Y="3" Width="3" />
+    <Members>
+      <Property Name="this" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CAACACAAAEAAAAAECAAQAAAAAAAAAEBIAAAAARAAAAA=</HashCode>
+      <FileName>BattleMap.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_ships" />
+      <Property Name="StatusMap" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="SeaBattleServer.Bot">
+    <Position X="9.75" Y="5" Width="2.75" />
+    <Members>
+      <Field Name="_abilityAddShip" Hidden="true" />
+      <Method Name="GenerateShip" Hidden="true" />
+      <Method Name="GetRandomAddress" Hidden="true" />
+      <Method Name="HasDown" Hidden="true" />
+      <Method Name="HasLeft" Hidden="true" />
+      <Method Name="HasRight" Hidden="true" />
+      <Method Name="HasTop" Hidden="true" />
+      <Method Name="HitAround" Hidden="true" />
+      <Method Name="HitRandom" Hidden="true" />
+      <Method Name="isNormalAddress" Hidden="true" />
+      <Method Name="KillShip" Hidden="true" />
+      <Field Name="random" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="SeaBattleServer.Bot.Where" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Player\Bot.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Struct Name="SeaBattleServer.Bot.BotKillResult">
+        <TypeIdentifier>
+          <NewMemberFileName>Player\Bot.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <InheritanceLine Type="SeaBattleServer.Player" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11.125" Y="3.641" />
+        <Point X="11.125" Y="4.625" />
+        <Point X="10.819" Y="4.625" />
+        <Point X="10.819" Y="5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAIAwAAQAAAAUAQAQAAAQAAAAAAQAAIAIARBAAACAAA=</HashCode>
+      <FileName>Player\Bot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleServer.NormalBot">
+    <Position X="12.5" Y="10.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Player\NormalBot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleServer.SmartBot">
+    <Position X="8" Y="10.5" Width="2" />
+    <Members>
+      <Field Name="_indexShip" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Player\SmartBot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleServer.StupidBot">
+    <Position X="10.25" Y="10.5" Width="2" />
+    <InheritanceLine Type="SeaBattleServer.Bot" FixedToPoint="true">
+      <Path>
+        <Point X="11.125" Y="9.878" />
+        <Point X="11.125" Y="10.2" />
+        <Point X="11.083" Y="10.2" />
+        <Point X="11.083" Y="10.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Player\StupidBot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleServer.Server">
+    <Position X="0.5" Y="1.25" Width="2.5" />
+    <Members>
+      <Field Name="blockSingletone" Hidden="true" />
+      <Property Name="Instance" Hidden="true" />
+      <Field Name="server" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QAAAAAAIACAAAAAAAAAAAACAAAAAAAAAQQAAAAAAAAI=</HashCode>
+      <FileName>Server.cs</FileName>
+      <NewMemberFileName>Server1.cs</NewMemberFileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Instance" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Games" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="SeaBattleLibrary.Ship">
+    <Position X="17.75" Y="2.75" Width="2" />
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="AddressArray" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SeaBattleLibrary.Address">
+    <Position X="21.75" Y="2.75" Width="2.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Enum Name="GameRegime">
+    <Position X="8" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="SeaBattleLibrary.StatusField">
+    <Position X="17.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="SeaBattleServer.KillResult">
+    <Position X="13.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAgAAAAAAQAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>KillResult.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

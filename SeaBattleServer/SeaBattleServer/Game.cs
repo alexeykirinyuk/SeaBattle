@@ -23,6 +23,12 @@ namespace SeaBattleServer
             Handler1.Player.WhoseTurn = Handler2.Player.WhoseTurn;
             Handler2.Player.WhoseTurn = st;
         }
+
+        public void ReverseTurn(KillResult killResult)
+        {
+            if (killResult == KillResult.KillEmpty) ReverseTurn();
+        }
+
         public void SetWhoseTurn(bool player)
         {
             if (player)

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace SeaBattleLibrary
 {
@@ -16,32 +14,22 @@ namespace SeaBattleLibrary
             return ((ParamData<T>)param).Data;
         }
         
-
         [JsonObject("ParamData")]
-        public class ParamData<T>: Param
+        private class ParamData<T>: Param
         {
             [JsonProperty("Data")]
-            private T data;
-
-            [JsonIgnore]
-            public T Data
-            {
-                get
-                {
-                    return data;
-                }
-            }
+            internal T Data { get; private set; }
 
             public ParamData() { }
 
             public ParamData(T data)
             {
-                this.data = data;
+                this.Data = data;
             }
 
             public override string ToString()
             {
-                return data.GetType().ToString();
+                return Data.GetType().ToString();
             }
         }
     }

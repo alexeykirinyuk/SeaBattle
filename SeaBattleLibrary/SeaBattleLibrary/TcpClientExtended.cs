@@ -25,10 +25,10 @@ namespace SeaBattleLibrary
 
         public static Method ListenMethod(this TcpClient tcpClient)
         {
-                var byteMethod = new byte[tcpClient.ReceiveBufferSize];
-                tcpClient.GetStream().Read(byteMethod, 0, byteMethod.Length);
-                var strMethod = Encoding.UTF8.GetString(byteMethod);
-                return Method.Deserialize(strMethod);
+            var byteMethod = new byte[tcpClient.ReceiveBufferSize];
+            tcpClient.GetStream().Read(byteMethod, 0, byteMethod.Length);
+            var strMethod = Encoding.UTF8.GetString(byteMethod);
+            return Method.Deserialize(strMethod);
         }
     }
 }

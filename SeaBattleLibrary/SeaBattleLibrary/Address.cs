@@ -8,41 +8,44 @@ namespace SeaBattleLibrary
     public class Address: IEquatable<Address>
     {
         [JsonProperty("I")]
-        private int i;
+        private int _i;
+
         [JsonProperty("J")]
-        private int j;
+        private int _j;
         
         [JsonIgnore]
         public int I
         {
             get
             {
-                return i;
+                return _i;
             }
             set
             {
-                if (value >= 10 || value < 0) new IncorrectIndexException(0, 10);
-                else i = value;
+                if (value > 10 || value < 0) new IncorrectIndexException(0, 10);
+                else _i = value;
             }
         }
+
         [JsonIgnore]
         public int J
         {
             get
             {
-                return j;
+                return _j;
             }
 
             set
             {
-                if (value >= 10 || value < 0) new IncorrectIndexException(0, 10);
-                else j = value;
+                if (value > 10 || value < 0) new IncorrectIndexException(0, 10);
+                else _j = value;
             }
         }
 
         public Address() {
             
         }
+
         public Address(int i, int j)
         {
             this.I = i;
@@ -57,7 +60,7 @@ namespace SeaBattleLibrary
         public bool Equals(Address address)
         {
             if (address == null) return false;
-            else return i == address.i && j == address.j;
+            else return _i == address._i && _j == address._j;
         }
 
         public bool CanPutShip(List<Ship> addedShips)
@@ -68,12 +71,12 @@ namespace SeaBattleLibrary
                 for (int index = 0; index < ship.Length; index++)
                 {
                     can &= !(Equals(ship[index]));
-                    bool xEqualYBeside = i == ship[index].i && Math.Abs(j - ship[index].j) == 1;
-                    bool yEqualXBeside = j == ship[index].j && Math.Abs(i - ship[index].i) == 1;
-                    bool RightTop = i - 1 == ship[index].i && j + 1== ship[index].j;
-                    bool LeftTop = i - 1 == ship[index].i && j - 1 == ship[index].j;
-                    bool RightDown = i + 1 == ship[index].i && j + 1 == ship[index].j;
-                    bool LeftDown = i + 1 == ship[index].i && j - 1 == ship[index].j;
+                    bool xEqualYBeside = _i == ship[index]._i && Math.Abs(_j - ship[index]._j) == 1;
+                    bool yEqualXBeside = _j == ship[index]._j && Math.Abs(_i - ship[index]._i) == 1;
+                    bool RightTop = _i - 1 == ship[index]._i && _j + 1== ship[index]._j;
+                    bool LeftTop = _i - 1 == ship[index]._i && _j - 1 == ship[index]._j;
+                    bool RightDown = _i + 1 == ship[index]._i && _j + 1 == ship[index]._j;
+                    bool LeftDown = _i + 1 == ship[index]._i && _j - 1 == ship[index]._j;
                     can &= !(xEqualYBeside || yEqualXBeside || RightDown || RightTop || LeftDown || LeftTop);
                 }
             }
@@ -82,14 +85,14 @@ namespace SeaBattleLibrary
 
         public override int GetHashCode()
         {
-            return i*10+j;
+            return _i*10+_j;
         }
 
         public override string ToString()
         {
-            int iAbs = Math.Abs(i);
+            int iAbs = _i;
             char iChar = (char)((int)'А' + iAbs);
-            return iChar + (j+1).ToString();
+            return iChar + (_j+1).ToString();
         }
     }
 }

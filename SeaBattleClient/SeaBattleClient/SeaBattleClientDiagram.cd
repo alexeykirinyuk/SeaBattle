@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="Главная форма с игрой. Реализация расстановки кораблей.">
+    <Position X="0.514" Y="1.125" Height="0.597" Width="2.144" />
+  </Comment>
+  <Comment CommentText="Форма с выбором режима игры">
+    <Position X="0.5" Y="4.083" Height="0.347" Width="2.144" />
+  </Comment>
+  <Comment CommentText="Форма со статистикой игры">
+    <Position X="0.542" Y="6.569" Height="0.347" Width="2.144" />
+  </Comment>
+  <Comment CommentText="Класс, реализующий всю связь с сервером.">
+    <Position X="3.514" Y="1.208" Height="0.431" Width="2.464" />
+  </Comment>
+  <Class Name="SeaBattleClient.BattleForm">
+    <Position X="0.5" Y="1.75" Width="2.25" />
+    <Members>
+      <Field Name="_abilityAddField" Hidden="true" />
+      <Field Name="_abilityAddShip" Hidden="true" />
+      <Field Name="_addressBuf" Hidden="true" />
+      <Field Name="_shipsBuf" Hidden="true" />
+      <Field Name="_statisticForm" Hidden="true" />
+      <Field Name="buttonAddFoursShip" Hidden="true" />
+      <Field Name="buttonAddOnesShip" Hidden="true" />
+      <Field Name="buttonAddThreesShip" Hidden="true" />
+      <Field Name="buttonAddTwosShip" Hidden="true" />
+      <Field Name="buttonCancelShip" Hidden="true" />
+      <Field Name="buttonNewGame" Hidden="true" />
+      <Field Name="buttonStartGame" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="countLineInBattleDialog" Hidden="true" />
+      <Field Name="field01" Hidden="true" />
+      <Field Name="field02" Hidden="true" />
+      <Field Name="fieldEnemy00" Hidden="true" />
+      <Field Name="getHelp" Hidden="true" />
+      <Field Name="getStatisticForm" Hidden="true" />
+      <Field Name="label1" Hidden="true" />
+      <Field Name="label10" Hidden="true" />
+      <Field Name="label11" Hidden="true" />
+      <Field Name="label12" Hidden="true" />
+      <Field Name="label13" Hidden="true" />
+      <Field Name="label14" Hidden="true" />
+      <Field Name="label15" Hidden="true" />
+      <Field Name="label16" Hidden="true" />
+      <Field Name="label17" Hidden="true" />
+      <Field Name="label18" Hidden="true" />
+      <Field Name="label19" Hidden="true" />
+      <Field Name="label2" Hidden="true" />
+      <Field Name="label20" Hidden="true" />
+      <Field Name="label21" Hidden="true" />
+      <Field Name="label22" Hidden="true" />
+      <Field Name="label23" Hidden="true" />
+      <Field Name="label24" Hidden="true" />
+      <Field Name="label25" Hidden="true" />
+      <Field Name="label26" Hidden="true" />
+      <Field Name="label27" Hidden="true" />
+      <Field Name="label28" Hidden="true" />
+      <Field Name="label29" Hidden="true" />
+      <Field Name="label3" Hidden="true" />
+      <Field Name="label30" Hidden="true" />
+      <Field Name="label31" Hidden="true" />
+      <Field Name="label32" Hidden="true" />
+      <Field Name="label33" Hidden="true" />
+      <Field Name="label34" Hidden="true" />
+      <Field Name="label35" Hidden="true" />
+      <Field Name="label36" Hidden="true" />
+      <Field Name="label37" Hidden="true" />
+      <Field Name="label38" Hidden="true" />
+      <Field Name="label39" Hidden="true" />
+      <Field Name="label4" Hidden="true" />
+      <Field Name="label40" Hidden="true" />
+      <Field Name="label41" Hidden="true" />
+      <Field Name="label42" Hidden="true" />
+      <Field Name="label43" Hidden="true" />
+      <Field Name="label45" Hidden="true" />
+      <Field Name="label5" Hidden="true" />
+      <Field Name="label6" Hidden="true" />
+      <Field Name="label7" Hidden="true" />
+      <Field Name="label8" Hidden="true" />
+      <Field Name="label9" Hidden="true" />
+      <Field Name="labelLastAction" Hidden="true" />
+      <Field Name="labelTurn" Hidden="true" />
+      <Field Name="menuStrip1" Hidden="true" />
+      <Field Name="N" Hidden="true" />
+      <Field Name="panelEnemy" Hidden="true" />
+      <Field Name="panelMy" Hidden="true" />
+      <Field Name="pictureBox1" Hidden="true" />
+      <Field Name="pictureBox10" Hidden="true" />
+      <Field Name="pictureBox100" Hidden="true" />
+      <Field Name="pictureBox101" Hidden="true" />
+      <Field Name="pictureBox102" Hidden="true" />
+      <Field Name="pictureBox103" Hidden="true" />
+      <Field Name="pictureBox104" Hidden="true" />
+      <Field Name="pictureBox105" Hidden="true" />
+      <Field Name="pictureBox106" Hidden="true" />
+      <Field Name="pictureBox107" Hidden="true" />
+      <Field Name="pictureBox108" Hidden="true" />
+      <Field Name="pictureBox109" Hidden="true" />
+      <Field Name="pictureBox11" Hidden="true" />
+      <Field Name="pictureBox110" Hidden="true" />
+      <Field Name="pictureBox111" Hidden="true" />
+      <Field Name="pictureBox112" Hidden="true" />
+      <Field Name="pictureBox113" Hidden="true" />
+      <Field Name="pictureBox114" Hidden="true" />
+      <Field Name="pictureBox115" Hidden="true" />
+      <Field Name="pictureBox116" Hidden="true" />
+      <Field Name="pictureBox117" Hidden="true" />
+      <Field Name="pictureBox118" Hidden="true" />
+      <Field Name="pictureBox119" Hidden="true" />
+      <Field Name="pictureBox12" Hidden="true" />
+      <Field Name="pictureBox120" Hidden="true" />
+      <Field Name="pictureBox121" Hidden="true" />
+      <Field Name="pictureBox122" Hidden="true" />
+      <Field Name="pictureBox123" Hidden="true" />
+      <Field Name="pictureBox124" Hidden="true" />
+      <Field Name="pictureBox125" Hidden="true" />
+      <Field Name="pictureBox126" Hidden="true" />
+      <Field Name="pictureBox127" Hidden="true" />
+      <Field Name="pictureBox128" Hidden="true" />
+      <Field Name="pictureBox129" Hidden="true" />
+      <Field Name="pictureBox13" Hidden="true" />
+      <Field Name="pictureBox130" Hidden="true" />
+      <Field Name="pictureBox131" Hidden="true" />
+      <Field Name="pictureBox132" Hidden="true" />
+      <Field Name="pictureBox133" Hidden="true" />
+      <Field Name="pictureBox134" Hidden="true" />
+      <Field Name="pictureBox135" Hidden="true" />
+      <Field Name="pictureBox136" Hidden="true" />
+      <Field Name="pictureBox137" Hidden="true" />
+      <Field Name="pictureBox138" Hidden="true" />
+      <Field Name="pictureBox139" Hidden="true" />
+      <Field Name="pictureBox14" Hidden="true" />
+      <Field Name="pictureBox140" Hidden="true" />
+      <Field Name="pictureBox141" Hidden="true" />
+      <Field Name="pictureBox142" Hidden="true" />
+      <Field Name="pictureBox143" Hidden="true" />
+      <Field Name="pictureBox144" Hidden="true" />
+      <Field Name="pictureBox145" Hidden="true" />
+      <Field Name="pictureBox146" Hidden="true" />
+      <Field Name="pictureBox147" Hidden="true" />
+      <Field Name="pictureBox148" Hidden="true" />
+      <Field Name="pictureBox149" Hidden="true" />
+      <Field Name="pictureBox15" Hidden="true" />
+      <Field Name="pictureBox150" Hidden="true" />
+      <Field Name="pictureBox151" Hidden="true" />
+      <Field Name="pictureBox152" Hidden="true" />
+      <Field Name="pictureBox153" Hidden="true" />
+      <Field Name="pictureBox154" Hidden="true" />
+      <Field Name="pictureBox155" Hidden="true" />
+      <Field Name="pictureBox156" Hidden="true" />
+      <Field Name="pictureBox157" Hidden="true" />
+      <Field Name="pictureBox158" Hidden="true" />
+      <Field Name="pictureBox159" Hidden="true" />
+      <Field Name="pictureBox16" Hidden="true" />
+      <Field Name="pictureBox160" Hidden="true" />
+      <Field Name="pictureBox161" Hidden="true" />
+      <Field Name="pictureBox162" Hidden="true" />
+      <Field Name="pictureBox163" Hidden="true" />
+      <Field Name="pictureBox164" Hidden="true" />
+      <Field Name="pictureBox165" Hidden="true" />
+      <Field Name="pictureBox166" Hidden="true" />
+      <Field Name="pictureBox167" Hidden="true" />
+      <Field Name="pictureBox168" Hidden="true" />
+      <Field Name="pictureBox169" Hidden="true" />
+      <Field Name="pictureBox17" Hidden="true" />
+      <Field Name="pictureBox170" Hidden="true" />
+      <Field Name="pictureBox171" Hidden="true" />
+      <Field Name="pictureBox172" Hidden="true" />
+      <Field Name="pictureBox173" Hidden="true" />
+      <Field Name="pictureBox174" Hidden="true" />
+      <Field Name="pictureBox175" Hidden="true" />
+      <Field Name="pictureBox176" Hidden="true" />
+      <Field Name="pictureBox177" Hidden="true" />
+      <Field Name="pictureBox178" Hidden="true" />
+      <Field Name="pictureBox179" Hidden="true" />
+      <Field Name="pictureBox18" Hidden="true" />
+      <Field Name="pictureBox180" Hidden="true" />
+      <Field Name="pictureBox181" Hidden="true" />
+      <Field Name="pictureBox182" Hidden="true" />
+      <Field Name="pictureBox183" Hidden="true" />
+      <Field Name="pictureBox184" Hidden="true" />
+      <Field Name="pictureBox185" Hidden="true" />
+      <Field Name="pictureBox186" Hidden="true" />
+      <Field Name="pictureBox187" Hidden="true" />
+      <Field Name="pictureBox188" Hidden="true" />
+      <Field Name="pictureBox189" Hidden="true" />
+      <Field Name="pictureBox19" Hidden="true" />
+      <Field Name="pictureBox190" Hidden="true" />
+      <Field Name="pictureBox191" Hidden="true" />
+      <Field Name="pictureBox192" Hidden="true" />
+      <Field Name="pictureBox193" Hidden="true" />
+      <Field Name="pictureBox194" Hidden="true" />
+      <Field Name="pictureBox195" Hidden="true" />
+      <Field Name="pictureBox196" Hidden="true" />
+      <Field Name="pictureBox197" Hidden="true" />
+      <Field Name="pictureBox2" Hidden="true" />
+      <Field Name="pictureBox20" Hidden="true" />
+      <Field Name="pictureBox21" Hidden="true" />
+      <Field Name="pictureBox22" Hidden="true" />
+      <Field Name="pictureBox23" Hidden="true" />
+      <Field Name="pictureBox24" Hidden="true" />
+      <Field Name="pictureBox25" Hidden="true" />
+      <Field Name="pictureBox26" Hidden="true" />
+      <Field Name="pictureBox27" Hidden="true" />
+      <Field Name="pictureBox28" Hidden="true" />
+      <Field Name="pictureBox29" Hidden="true" />
+      <Field Name="pictureBox3" Hidden="true" />
+      <Field Name="pictureBox30" Hidden="true" />
+      <Field Name="pictureBox31" Hidden="true" />
+      <Field Name="pictureBox32" Hidden="true" />
+      <Field Name="pictureBox33" Hidden="true" />
+      <Field Name="pictureBox34" Hidden="true" />
+      <Field Name="pictureBox35" Hidden="true" />
+      <Field Name="pictureBox36" Hidden="true" />
+      <Field Name="pictureBox37" Hidden="true" />
+      <Field Name="pictureBox38" Hidden="true" />
+      <Field Name="pictureBox39" Hidden="true" />
+      <Field Name="pictureBox4" Hidden="true" />
+      <Field Name="pictureBox40" Hidden="true" />
+      <Field Name="pictureBox41" Hidden="true" />
+      <Field Name="pictureBox42" Hidden="true" />
+      <Field Name="pictureBox43" Hidden="true" />
+      <Field Name="pictureBox44" Hidden="true" />
+      <Field Name="pictureBox45" Hidden="true" />
+      <Field Name="pictureBox46" Hidden="true" />
+      <Field Name="pictureBox47" Hidden="true" />
+      <Field Name="pictureBox48" Hidden="true" />
+      <Field Name="pictureBox49" Hidden="true" />
+      <Field Name="pictureBox5" Hidden="true" />
+      <Field Name="pictureBox50" Hidden="true" />
+      <Field Name="pictureBox51" Hidden="true" />
+      <Field Name="pictureBox52" Hidden="true" />
+      <Field Name="pictureBox53" Hidden="true" />
+      <Field Name="pictureBox54" Hidden="true" />
+      <Field Name="pictureBox55" Hidden="true" />
+      <Field Name="pictureBox56" Hidden="true" />
+      <Field Name="pictureBox57" Hidden="true" />
+      <Field Name="pictureBox58" Hidden="true" />
+      <Field Name="pictureBox59" Hidden="true" />
+      <Field Name="pictureBox6" Hidden="true" />
+      <Field Name="pictureBox60" Hidden="true" />
+      <Field Name="pictureBox61" Hidden="true" />
+      <Field Name="pictureBox62" Hidden="true" />
+      <Field Name="pictureBox63" Hidden="true" />
+      <Field Name="pictureBox64" Hidden="true" />
+      <Field Name="pictureBox65" Hidden="true" />
+      <Field Name="pictureBox66" Hidden="true" />
+      <Field Name="pictureBox67" Hidden="true" />
+      <Field Name="pictureBox68" Hidden="true" />
+      <Field Name="pictureBox69" Hidden="true" />
+      <Field Name="pictureBox7" Hidden="true" />
+      <Field Name="pictureBox70" Hidden="true" />
+      <Field Name="pictureBox71" Hidden="true" />
+      <Field Name="pictureBox72" Hidden="true" />
+      <Field Name="pictureBox73" Hidden="true" />
+      <Field Name="pictureBox74" Hidden="true" />
+      <Field Name="pictureBox75" Hidden="true" />
+      <Field Name="pictureBox76" Hidden="true" />
+      <Field Name="pictureBox77" Hidden="true" />
+      <Field Name="pictureBox78" Hidden="true" />
+      <Field Name="pictureBox79" Hidden="true" />
+      <Field Name="pictureBox8" Hidden="true" />
+      <Field Name="pictureBox80" Hidden="true" />
+      <Field Name="pictureBox81" Hidden="true" />
+      <Field Name="pictureBox82" Hidden="true" />
+      <Field Name="pictureBox83" Hidden="true" />
+      <Field Name="pictureBox84" Hidden="true" />
+      <Field Name="pictureBox85" Hidden="true" />
+      <Field Name="pictureBox86" Hidden="true" />
+      <Field Name="pictureBox87" Hidden="true" />
+      <Field Name="pictureBox88" Hidden="true" />
+      <Field Name="pictureBox89" Hidden="true" />
+      <Field Name="pictureBox9" Hidden="true" />
+      <Field Name="pictureBox90" Hidden="true" />
+      <Field Name="pictureBox91" Hidden="true" />
+      <Field Name="pictureBox92" Hidden="true" />
+      <Field Name="pictureBox93" Hidden="true" />
+      <Field Name="pictureBox94" Hidden="true" />
+      <Field Name="pictureBox95" Hidden="true" />
+      <Field Name="pictureBox96" Hidden="true" />
+      <Field Name="pictureBox97" Hidden="true" />
+      <Field Name="pictureBox98" Hidden="true" />
+      <Field Name="pictureBox99" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="SeaBattleClient.BattleForm.ActionToPicBox" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BattleForm.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="SeaBattleClient.BattleForm.Del" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>BattleForm.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>/yBIZhAZAyAAAVAAgBDAwCOSQBgAAYCAfwYpAvJKUng=</HashCode>
+      <FileName>BattleForm.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_client" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SeaBattleClient.BattleCient">
+    <Position X="3.5" Y="1.75" Width="2.5" />
+    <Members>
+      <Field Name="_regime" Hidden="true" />
+      <Field Name="_ships" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAC4ABAAAAAAgEAAAAAAQAgAAAAACAAAAQA4FAABIA=</HashCode>
+      <FileName>SeaBattleClient.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_form" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SeaBattleClient.RegimeDialog">
+    <Position X="0.5" Y="4.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAADALAACAAAQCAAAAAAAAAABYAAAAAAQ=</HashCode>
+      <FileName>RegimeDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SeaBattleClient.StatisticForm" Collapsed="true">
+    <Position X="0.5" Y="7" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="SeaBattleClient.StatisticForm.Del" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>StatisticForm.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAACAAAAAAAACAAAACAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>StatisticForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

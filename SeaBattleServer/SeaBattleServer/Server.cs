@@ -1,10 +1,7 @@
-﻿using SeaBattleLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 
 namespace SeaBattleServer
 {
@@ -17,11 +14,11 @@ namespace SeaBattleServer
         {
             get
             {
-                if(server == null)
+                if (server == null)
                 {
-                    lock(blockSingletone)
+                    lock (blockSingletone)
                     {
-                        if(server == null)
+                        if (server == null)
                             server = new Server();
                     }
                 }
@@ -30,7 +27,7 @@ namespace SeaBattleServer
         }
 
         private TcpListener tcpListner;
-        
+
         public List<Game> Games { get; set; }
 
         public List<Handler> PlayerHadlerList { get; set; }
@@ -48,7 +45,7 @@ namespace SeaBattleServer
         public void Start()
         {
             tcpListner.Start();
-            while(true)
+            while (true)
             {
                 var acceptClient = tcpListner.AcceptTcpClient();
                 Console.WriteLine("Присоединился новый клиент");

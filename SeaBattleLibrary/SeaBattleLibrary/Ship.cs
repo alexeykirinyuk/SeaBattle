@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace SeaBattleLibrary
 {
     [JsonObject("Ship")]
-    public class Ship: Param
+    public class Ship
     {
         [JsonProperty("AddressArray")]
         public Address[] AddressArray { get; private set; }
@@ -41,42 +41,46 @@ namespace SeaBattleLibrary
         public bool isNormalShip()
         {
             if (Length == 1) return true;
-            int[] x = new int[Length];
-            int[] y = new int[Length];
+
+            int[] xArray = new int[Length];
+            int[] yArray = new int[Length];
+
             int i = 0;
-            foreach (Address address in AddressArray)
+
+            foreach (var address in AddressArray)
             {
-                x[i] = address.I;
-                y[i] = address.J;
+                xArray[i] = address.I;
+                yArray[i] = address.J;
                 i++;
             }
 
             bool xEqual = true;
             bool yEqual = true;
 
-            for (int m = 0; m < Length - 1; m++)
+            for (var m = 0; m < Length - 1; m++)
             {
-                xEqual &= x[m] == x[m + 1];
-                yEqual &= y[m] == y[m + 1];
+                xEqual &= xArray[m] == xArray[m + 1];
+                yEqual &= yArray[m] == yArray[m + 1];
             }
 
             if (!(xEqual || yEqual)) return false;
 
             bool isNormal = true;
+
             if (xEqual)
             {
-                Array.Sort(y);
-                for (int k = 0; k < y.Length - 1; k++)
+                Array.Sort(yArray);
+                for (int k = 0; k < yArray.Length - 1; k++)
                 {
-                    isNormal &= Math.Abs(y[k] - y[k + 1]) == 1;
+                    isNormal &= Math.Abs(yArray[k] - yArray[k + 1]) == 1;
                 }
             }
             if (yEqual)
             {
-                Array.Sort(x);
-                for (int k = 0; k < x.Length - 1; k++)
+                Array.Sort(xArray);
+                for (int k = 0; k < xArray.Length - 1; k++)
                 {
-                    isNormal &= Math.Abs(x[k] - x[k + 1]) == 1;
+                    isNormal &= Math.Abs(xArray[k] - xArray[k + 1]) == 1;
                 }
             }
             return isNormal;
